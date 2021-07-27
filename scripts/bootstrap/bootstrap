@@ -1,0 +1,190 @@
+#!/bin/bash
+#
+# Script name: bootstrap-xfce
+# Description: Install xfce4 with my preferred applications and configurations.
+# Dependencies: gpg, apt-transport-https
+# GitHub: https://github.com/ifcodesdotnet/.dotfiles-min
+# Contributors: Ismael Fernandez
+
+source $HOME/dotfiles/scripts/bootstrap/bootstrap-variables/apt-packages
+source $HOME/dotfiles/scripts/bootstrap/bootstrap-variables/stow-targets
+source $HOME/dotfiles/scripts/bootstrap/bootstrap-variables/stow-targets-to-delete
+source $HOME/dotfiles/scripts/bootstrap/bootstrap-variables/code-extensions
+
+sudo echo > /dev/null 2>&1
+
+update_apt(){
+  echo updating apt cache.
+
+  sudo apt update
+  if [ $? -ne 0 ];
+  then
+      clear
+      echo failure updating apt cache.
+      exit
+  fi
+
+  echo completed updating apt cache
+}
+
+upgrade_apt(){
+  echo upgrading apt packages.
+
+  sudo apt upgrade -y
+  if [ $? -ne 0 ];
+  then
+      clear
+      echo failure upgrading apt packages.
+      exit
+  fi
+
+  echo completed upgrading apt packages.
+}
+
+install_apt_packages(){
+  echo installing apt packages.
+
+  for package in "${!apt_packages[@]}";
+  do
+    echo installing ${apt_packages[$package]} and dependencies.
+    echo
+    sleep 1
+
+    sudo apt install -y ${apt_packages[$package]}
+    if [ $? -ne 0 ];
+    then
+        clear
+        echo failure installing ${apt_packages[$package]}.
+        exit
+    fi
+  done
+
+  echo completed installing apt packages.
+}
+
+stow_targets_to_delete(){
+  echo deleting stow targets.
+
+  for target in "${stow_targets_to_delete[@]}";
+  do
+    echo deleting $target
+    sleep 1
+
+    if [ -f "$target" ]
+    then
+      sudo rm $target
+    elif [ -d" $target" ]
+    then
+      sudo rm -rf $target
+    fi
+  done
+
+  echo completed deleting stow targets.
+}
+
+create_config_directories(){
+  echo creating config directory and sub directories
+
+  if [ ! -d "$HOME/.config" ]
+  then
+      mkdir $HOME/.config
+      mkdir $HOME/.config/xfce4
+      mkdir -p $HOME/.config/Code/User
+  fi
+  
+  echo completed creating config directory and sub directories
+}
+
+apply_stow_configurations(){
+  echo applying stow configurations
+
+  for target in "${!stowTargets[@]}";
+  do
+    echo applying configuration for $target.
+    
+    stow -v -d $HOME/dotfiles/configs -t ${stowTargets[$target]}
+  done
+
+  echo completed applying stow configurations
+}
+
+install_code(){
+  echo installing vscode
+
+  wget -qO- https://packages.microsoft.com/keys/microsoft.asc |
+          gpg --dearmor > ~/packages.microsoft.gpg
+
+  sudo install -o root                  \
+               -g root                  \
+               -m 644                   \
+               ~/packages.microsoft.gpg \
+               /etc/apt/trusted.gpg.d/
+             
+  rm ~/packages.microsoft.gpg
+
+  sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
+
+  update_apt
+
+  sudo apt-get install -y code
+
+  echo completed installing vscode.
+}
+
+install_code_extensions(){
+  echo installing vscode extensions
+
+  for extension in "${!extensions[@]}";
+  do
+      code --install-extension ${extensions[$extension]}
+  done
+
+  echo completed installing vscode extension
+}
+
+install_vimix_theme(){
+  echo installing vimix theme
+
+  sudo git -C /usr/share/themes/ clone https://github.com/vinceliuice/vimix-gtk-themes.git 
+  sudo /usr/share/themes/vimix-gtk-themes/install.sh -a -d /usr/share/themes
+
+  echo completed installing vimix theme
+}
+
+install_vimix_icon(){
+  echo installing vimix icon theme
+
+  sudo git -C /usr/share/icons/ clone https://github.com/vinceliuice/vimix-icon-theme.git
+  sudo /usr/share/icons/vimix-icon-theme/install.sh -a -d /usr/share/icons
+
+  echo completed installing vimix icon theme
+}
+
+restore_interfaces_file(){
+  echo begin restoration of interfaces file
+
+  head -8 /etc/network/interfaces > ~/interfaces
+  sudo rm /etc/network/interfaces
+  sudo mv ~/interfaces /etc/network/interfaces
+  
+  echo completed restoration of interfaces file
+}
+
+restart_system(){
+  echo system bootstrapping complete, restarting now . . .
+  sleep 1
+  sudo reboot
+}
+
+update_apt
+upgrade_apt
+install_apt_packages
+stow_targets_to_delete
+create_config_directories
+apply_stow_configurations
+install_code
+install_code_extensions
+install_vimix_theme
+install_vimix_icon
+restore_interfaces_file
+restart_system

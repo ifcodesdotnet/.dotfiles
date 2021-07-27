@@ -1,0 +1,15 @@
+{
+    "workbench.sideBar.location": "right",
+    "workbench.startupEditor": "none",
+    "workbench.iconTheme": "material-icon-theme",
+    "editor.minimap.enabled": false,
+    "editor.renderWhitespace": "all",
+    "files.autoSave": "afterDelay",
+    "update.mode": "none",
+    "explorer.confirmDragAndDrop": false,
+    "explorer.confirmDelete": false,
+    "workbench.colorTheme": "Horizon",
+    "window.menuBarVisibility": "toggle",
+    "explorer.compactFolders": false,
+    "editor.mouseWheelZoom": true
+}
