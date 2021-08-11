@@ -91,7 +91,7 @@ create_config_directories(){
       mkdir $HOME/.config/xfce4
       mkdir -p $HOME/.config/Code/User
   fi
-  
+
   echo completed creating config directory and sub directories
 }
 
@@ -101,8 +101,8 @@ apply_stow_configurations(){
   for target in "${!stowTargets[@]}";
   do
     echo applying configuration for $target.
-    
-    stow -v -d $HOME/dotfiles/configs -t ${stowTargets[$target]}
+
+    stow -v -d $HOME/.dotfiles/configs -t ${stowTargets[$target]}
   done
 
   echo completed applying stow configurations
@@ -119,7 +119,7 @@ install_code(){
                -m 644                   \
                ~/packages.microsoft.gpg \
                /etc/apt/trusted.gpg.d/
-             
+
   rm ~/packages.microsoft.gpg
 
   sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
@@ -145,7 +145,7 @@ install_code_extensions(){
 install_vimix_theme(){
   echo installing vimix theme
 
-  sudo git -C /usr/share/themes/ clone https://github.com/vinceliuice/vimix-gtk-themes.git 
+  sudo git -C /usr/share/themes/ clone https://github.com/vinceliuice/vimix-gtk-themes.git
   sudo /usr/share/themes/vimix-gtk-themes/install.sh -a -d /usr/share/themes
 
   echo completed installing vimix theme
@@ -166,7 +166,7 @@ restore_interfaces_file(){
   head -8 /etc/network/interfaces > ~/interfaces
   sudo rm /etc/network/interfaces
   sudo mv ~/interfaces /etc/network/interfaces
-  
+
   echo completed restoration of interfaces file
 }
 
