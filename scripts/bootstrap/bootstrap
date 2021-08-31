@@ -3,12 +3,12 @@
 # Script name: bootstrap-xfce
 # Description: Install xfce4 with my preferred applications and configurations.
 # Dependencies: gpg, apt-transport-https
-# GitHub: https://github.com/ifcodesdotnet/.dotfiles-min
+# GitHub: https://github.com/ifcodesdotnet/.dotfiles
 # Contributors: Ismael Fernandez
 
-source $HOME/dotfiles/scripts/bootstrap/bootstrap-variables/apt-packages
-source $HOME/dotfiles/scripts/bootstrap/bootstrap-variables/stow-targets
-source $HOME/dotfiles/scripts/bootstrap/bootstrap-variables/stow-targets-to-delete
+source $HOME/.dotfiles/scripts/bootstrap/bootstrap-variables/apt-packages
+source $HOME/.dotfiles/scripts/bootstrap/bootstrap-variables/stow-targets
+source $HOME/.dotfiles/scripts/bootstrap/bootstrap-variables/stow-targets-to-delete
 
 sudo echo > /dev/null 2>&1
 
@@ -101,7 +101,7 @@ apply_stow_configurations(){
   do
     echo applying configuration for $target.
     
-    stow -v -d $HOME/dotfiles/configs -t ${stowTargets[$target]}
+    stow -v -d $HOME/.dotfiles/configs -t ${stowTargets[$target]}
   done
 
   echo completed applying stow configurations
