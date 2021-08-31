@@ -1,0 +1,21 @@
+#!/bin/bash
+#
+# Script name: install-code-extensions
+# Description: Install my preferred Microsoft Visual Studio Code
+#              extensions on Debian 10.
+# Dependencies: code
+# GitHub: https://github.com/ifcodesdotnet/.dotfiles
+# Contributors: Ismael Fernandez
+
+sudo echo > /dev/null 2>&1
+
+vscode_extensions=()
+vscode_extensions+=("PKief.material-icon-theme")
+vscode_extensions+=("jolaleye.horizon-theme-vscode")
+vscode_extensions+=("ms-dotnettools.csharp")
+vscode_extensions+=("ms-azuretools.vscode-docker")
+
+for extension in "${!extensions[@]}";
+do
+    code --install-extension ${extensions[$extension]}
+done

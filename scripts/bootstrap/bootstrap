@@ -9,7 +9,6 @@
 source $HOME/dotfiles/scripts/bootstrap/bootstrap-variables/apt-packages
 source $HOME/dotfiles/scripts/bootstrap/bootstrap-variables/stow-targets
 source $HOME/dotfiles/scripts/bootstrap/bootstrap-variables/stow-targets-to-delete
-source $HOME/dotfiles/scripts/bootstrap/bootstrap-variables/code-extensions
 
 sudo echo > /dev/null 2>&1
 
@@ -108,38 +107,12 @@ apply_stow_configurations(){
   echo completed applying stow configurations
 }
 
-install_code(){
-  echo installing vscode
-
-  wget -qO- https://packages.microsoft.com/keys/microsoft.asc |
-          gpg --dearmor > ~/packages.microsoft.gpg
-
-  sudo install -o root                  \
-               -g root                  \
-               -m 644                   \
-               ~/packages.microsoft.gpg \
-               /etc/apt/trusted.gpg.d/
-             
-  rm ~/packages.microsoft.gpg
-
-  sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
-
-  update_apt
-
-  sudo apt-get install -y code
-
-  echo completed installing vscode.
+install_vscode(){
+  ~/.dotfiles/scripts/install-software/install-vscode
 }
 
-install_code_extensions(){
-  echo installing vscode extensions
-
-  for extension in "${!extensions[@]}";
-  do
-      code --install-extension ${extensions[$extension]}
-  done
-
-  echo completed installing vscode extension
+install_vscode_extensions(){
+ ~/.dotfiles/scripts/install-software/install-code-extensions
 }
 
 install_vimix_theme(){

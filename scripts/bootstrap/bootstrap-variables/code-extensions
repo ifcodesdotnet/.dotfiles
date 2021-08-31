@@ -1,8 +1,0 @@
-#!/bin/bash
-
-declare -A extensions
-extensions[0]="PKief.material-icon-theme"
-extensions[1]="jolaleye.horizon-theme-vscode"
-extensions[2]="ms-dotnettools.csharp"
-extensions[3]="ms-azuretools.vscode-docker"
-extensions[4]="eamodio.gitlens"
