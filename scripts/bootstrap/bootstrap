@@ -72,7 +72,7 @@ stow_targets_to_delete(){
     if [ -f "$target" ]
     then
       sudo rm $target
-    elif [ -d" $target" ]
+    elif [ -d "$target" ]
     then
       sudo rm -rf $target
     fi
