@@ -112,7 +112,7 @@ install_vscode(){
 }
 
 install_vscode_extensions(){
- ~/.dotfiles/scripts/install-software/install-code-extensions
+ ~/.dotfiles/scripts/install-software/install-vscode-extensions
 }
 
 install_vimix_theme(){
@@ -155,8 +155,8 @@ install_apt_packages
 stow_targets_to_delete
 create_config_directories
 apply_stow_configurations
-install_code
-install_code_extensions
+install_vscode
+install_vscode_extensions
 install_vimix_theme
 install_vimix_icon
 restore_interfaces_file
