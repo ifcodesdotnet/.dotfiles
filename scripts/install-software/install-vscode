@@ -56,6 +56,18 @@ update_apt_cache(){
     fi
 }
 
+install_apt_transport_https(){
+    echo installing apt-transport-https.
+
+    sudo apt-get install -y apt-transport-https
+    if [ $? -ne 0 ];
+    then
+        clear
+        echo failure installing apt-transport-https.
+        exit
+    fi
+}
+
 install_vscode(){
     echo installing vscode.
 
@@ -73,4 +85,5 @@ install_microsoft_repository_key
 delete_microsoft_repository_key
 update_apt_sources_list
 update_apt_cache
+install_apt_transport_https
 install_vscode
