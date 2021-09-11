@@ -24,8 +24,7 @@ update_apt_cache(){
     fi
 }
 
-
-upgrade_apt(){
+upgrade_apt_packages(){
   echo upgrading apt packages.
 
   sudo apt upgrade -y
@@ -40,13 +39,8 @@ upgrade_apt(){
 }
 
 install_apt_packages(){
-  echo installing apt packages.
-
   for package in "${!apt_packages[@]}";
   do
-    echo installing ${apt_packages[$package]} and dependencies.
-    echo
-    sleep 1
 
     sudo apt install -y ${apt_packages[$package]}
     if [ $? -ne 0 ];
@@ -56,13 +50,9 @@ install_apt_packages(){
         exit
     fi
   done
-
-  echo completed installing apt packages.
 }
 
 stow_targets_to_delete(){
-  echo deleting stow targets.
-
   for target in "${stow_targets_to_delete[@]}";
   do
     echo deleting $target
@@ -76,13 +66,9 @@ stow_targets_to_delete(){
       sudo rm -rf $target
     fi
   done
-
-  echo completed deleting stow targets.
 }
 
 create_config_directories(){
-  echo creating config directory and sub directories
-
   if [ ! -d "$HOME/.config" ]
   then
       mkdir $HOME/.config
@@ -92,8 +78,6 @@ create_config_directories(){
 }
 
 apply_stow_configurations(){
-  echo applying stow configurations
-
   for target in "${!stowTargets[@]}";
   do
     echo applying configuration for $target.
@@ -139,7 +123,7 @@ restart_system(){
 }
 
 update_apt_cache
-upgrade_apt
+upgrade_apt_packages
 install_apt_packages
 stow_targets_to_delete
 create_config_directories
