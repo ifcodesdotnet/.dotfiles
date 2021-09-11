@@ -9,39 +9,38 @@
 
 sudo echo > /dev/null 2>&1
 
-download_vscode_debian_repository_key(){
-    wget -qO- https://packages.microsoft.com/keys/microsoft.asc |
-    gpg --dearmor > ~/packages.microsoft.gpg
+download_microsoft_repository_key(){
+    if [ ! -f "/etc/apt/trusted.gpg.d/packages.microsoft.gpg" ]; 
+    then
+        echo downloading microsoft repository key.
+        wget -qO- https://packages.microsoft.com/keys/microsoft.asc |
+        gpg --dearmor > ~/packages.microsoft.gpg
+    fi
 }
 
-install_vscode_debian_repository_key(){
-    sudo install -o root      \
-    -g root                  \
-    -m 644                   \
-    ~/packages.microsoft.gpg \
-    /etc/apt/trusted.gpg.d/
+install_microsoft_repository_key(){
+    if [ -f "~/packages.microsoft.gpg" ]; 
+    then
+        sudo install -o root      \
+        -g root                  \
+        -m 644                   \
+        ~/packages.microsoft.gpg \
+        /etc/apt/trusted.gpg.d/
+    fi
 }
 
 delete_microsoft_repository_key(){
-    rm ~/packages.microsoft.gpg
+    if [ -f "~/packages.microsoft.gpg" ]; 
+    then
+        rm ~/packages.microsoft.gpg
+    fi
 }
 
 update_apt_sources_list(){
     if [ ! -f "/etc/apt/sources.list.d/vscode.list" ]; 
     then
-        echo adding vscode debian repository link.
+        echo adding vscode repository link.
         sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
-    fi
-}
-
-install_apt_transport_https(){
-    echo installing apt-transport-https.
-
-    sudo apt-get install -y apt-transport-https > /dev/null 2>&1
-    if [ $? -ne 0 ];
-    then
-        echo failure installing apt-transport-https.
-        exit
     fi
 }
 
@@ -57,20 +56,19 @@ update_apt_cache(){
 }
 
 install_vscode(){
-    echo installing code.
+    echo installing vscode.
 
     sudo apt install -y code
     if [ $? -ne 0 ];
     then
-        echo failure installing code.
+        echo failure installing vscode.
         exit
     fi
 }
 
-download_vscode_debian_repository_key
-install_vscode_debian_repository_key
+download_microsoft_repository_key
+install_microsoft_repository_key
 delete_microsoft_repository_key
 update_apt_sources_list
-install_apt_transport_https
 update_apt_cache
 install_vscode
