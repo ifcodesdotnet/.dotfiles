@@ -12,19 +12,18 @@ source $HOME/.dotfiles/scripts/bootstrap/bootstrap-variables/stow-targets-to-del
 
 sudo echo > /dev/null 2>&1
 
-update_apt(){
-  echo updating apt cache.
+update_apt_cache(){
+    echo updating apt cache.
 
-  sudo apt update
-  if [ $? -ne 0 ];
-  then
-      clear
-      echo failure updating apt cache.
-      exit
-  fi
-
-  echo completed updating apt cache
+    sudo apt update -y
+    if [ $? -ne 0 ];
+    then
+        clear
+        echo failure updating apt cache.
+        exit
+    fi
 }
+
 
 upgrade_apt(){
   echo upgrading apt packages.
@@ -90,8 +89,6 @@ create_config_directories(){
       mkdir $HOME/.config/xfce4
       mkdir -p $HOME/.config/Code/User
   fi
-  
-  echo completed creating config directory and sub directories
 }
 
 apply_stow_configurations(){
@@ -103,8 +100,6 @@ apply_stow_configurations(){
     
     stow -v -d $HOME/.dotfiles/configs -t ${stowTargets[$target]}
   done
-
-  echo completed applying stow configurations
 }
 
 install_vscode(){
@@ -120,8 +115,6 @@ install_vimix_theme(){
 
   sudo git -C /usr/share/themes/ clone https://github.com/vinceliuice/vimix-gtk-themes.git 
   sudo /usr/share/themes/vimix-gtk-themes/install.sh -a -d /usr/share/themes
-
-  echo completed installing vimix theme
 }
 
 install_vimix_icon(){
@@ -129,8 +122,6 @@ install_vimix_icon(){
 
   sudo git -C /usr/share/icons/ clone https://github.com/vinceliuice/vimix-icon-theme.git
   sudo /usr/share/icons/vimix-icon-theme/install.sh -a -d /usr/share/icons
-
-  echo completed installing vimix icon theme
 }
 
 restore_interfaces_file(){
@@ -139,8 +130,6 @@ restore_interfaces_file(){
   head -8 /etc/network/interfaces > ~/interfaces
   sudo rm /etc/network/interfaces
   sudo mv ~/interfaces /etc/network/interfaces
-  
-  echo completed restoration of interfaces file
 }
 
 restart_system(){
@@ -149,7 +138,7 @@ restart_system(){
   sudo reboot
 }
 
-update_apt
+update_apt_cache
 upgrade_apt
 install_apt_packages
 stow_targets_to_delete
