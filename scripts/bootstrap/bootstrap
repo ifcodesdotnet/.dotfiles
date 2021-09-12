@@ -13,15 +13,15 @@ source $HOME/.dotfiles/scripts/bootstrap/bootstrap-variables/stow-targets-to-del
 sudo echo > /dev/null 2>&1
 
 update_apt_cache(){
-    echo updating apt cache.
+  echo updating apt cache.
 
-    sudo apt update -y
-    if [ $? -ne 0 ];
-    then
-        clear
-        echo failure updating apt cache.
-        exit
-    fi
+  sudo apt update -y
+  if [ $? -ne 0 ];
+  then
+      clear
+      echo failure updating apt cache.
+      exit
+  fi
 }
 
 upgrade_apt_packages(){
@@ -34,8 +34,6 @@ upgrade_apt_packages(){
       echo failure upgrading apt packages.
       exit
   fi
-
-  echo completed upgrading apt packages.
 }
 
 install_apt_packages(){
@@ -55,15 +53,19 @@ install_apt_packages(){
 stow_targets_to_delete(){
   for target in "${stow_targets_to_delete[@]}";
   do
-    echo deleting $target
-    sleep 1
-
     if [ -f "$target" ]
     then
       sudo rm $target
     elif [ -d "$target" ]
     then
       sudo rm -rf $target
+    fi
+
+    if [ $? -ne 0 ];
+    then
+        clear
+        echo failure deleting stow target $target. 
+        exit
     fi
   done
 }
@@ -78,11 +80,9 @@ create_config_directories(){
 }
 
 apply_stow_configurations(){
-  for target in "${!stowTargets[@]}";
+  for target in "${!stow_targets[@]}";
   do
-    echo applying configuration for $target.
-    
-    stow -v -d $HOME/.dotfiles/configs -t ${stowTargets[$target]}
+    stow -v -d $HOME/.dotfiles/configs -t $HOME/${stow_targets[$target]} $target
   done
 }
 

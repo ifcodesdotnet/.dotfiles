@@ -1,7 +1,7 @@
 #!/bin/bash
 
-declare -A stowTargets
-stowTargets[git]="$HOME/ git"
-stowTargets[code]="$HOME/.config/Code/User code"
-stowTargets[bash]="$HOME/ bash"
-stowTargets[xfce]="$HOME/.config/xfce4/ xfce4"
+declare -A stow_targets
+stow_targets[git]=""
+stow_targets[bash]=""
+stow_targets[code]=".config/Code/User"
+stow_targets[xfce4]=".config/xfce4/"
