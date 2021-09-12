@@ -12,6 +12,7 @@ apt_packages+=("xfce4-terminal")
 apt_packages+=("thunar-archive-plugin")
 apt_packages+=("network-manager-gnome")
 apt_packages+=("gvfs-backends")
+apt_packages+=("libsass1")
 
 #apt_packages+=("synaptic")
 #apt_packages+=("firefox-esr")
