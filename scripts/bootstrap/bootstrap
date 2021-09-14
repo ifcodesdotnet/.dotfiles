@@ -53,20 +53,7 @@ install_apt_packages(){
 stow_targets_to_delete(){
   for target in "${stow_targets_to_delete[@]}";
   do
-    if [ -f "$target" ]
-    then
-      sudo rm $target
-    elif [ -d "$target" ]
-    then
-      sudo rm -rf $target
-    fi
-
-    if [ $? -ne 0 ];
-    then
-        clear
-        echo failure deleting stow target $target. 
-        exit
-    fi
+    sudo rm -rf $target
   done
 }
 
