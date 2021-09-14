@@ -1,0 +1,18 @@
+#!/bin/bash
+#
+# Script name: install-vimix-theme
+# Description: 
+# Dependencies: git
+# GitHub: https://github.com/ifcodesdotnet/.dotfiles
+# Contributors: Ismael Fernandez
+
+download_vimix_theme(){
+  sudo git -C /usr/share/themes/ clone https://github.com/vinceliuice/vimix-gtk-themes.git
+}
+
+install_vimix_theme(){
+  sudo /usr/share/themes/vimix-gtk-themes/install.sh -a -d /usr/share/themes
+}
+
+download_vimix_theme
+install_vimix_theme

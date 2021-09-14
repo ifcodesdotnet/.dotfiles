@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Script name: bootstrap-xfce
+# Script name: bootstrap
 # Description: Install xfce4 with my preferred applications and configurations.
 # Dependencies: gpg, apt-transport-https
 # GitHub: https://github.com/ifcodesdotnet/.dotfiles
