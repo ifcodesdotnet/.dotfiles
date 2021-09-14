@@ -84,7 +84,7 @@ install_vscode_extensions(){
 install_vimix_theme(){
   echo installing vimix theme
 
-  sudo git -C /usr/share/themes/ clone https://github.com/vinceliuice/vimix-gtk-themes.git 
+  sudo git -C /usr/share/themes/ clone https://github.com/vinceliuice/vimix-gtk-themes.git
   sudo /usr/share/themes/vimix-gtk-themes/install.sh -a -d /usr/share/themes
 }
 
