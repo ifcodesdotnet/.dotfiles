@@ -6,6 +6,8 @@
 # GitHub: https://github.com/ifcodesdotnet/.dotfiles
 # Contributors: Ismael Fernandez
 
+sudo echo > /dev/null 2>&1
+
 download_vimix_theme(){
   sudo git -C /usr/share/themes/ clone https://github.com/vinceliuice/vimix-gtk-themes.git
 }
