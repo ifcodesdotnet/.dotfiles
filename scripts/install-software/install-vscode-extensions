@@ -15,7 +15,7 @@ vscode_extensions+=("jolaleye.horizon-theme-vscode")
 vscode_extensions+=("ms-dotnettools.csharp")
 vscode_extensions+=("ms-azuretools.vscode-docker")
 
-for extension in "${!extensions[@]}";
+for extension in "${!vscode_extensions[@]}";
 do
-    code --install-extension ${extensions[$extension]}
+    code --install-extension ${vscode_extensions[$extension]}
 done
