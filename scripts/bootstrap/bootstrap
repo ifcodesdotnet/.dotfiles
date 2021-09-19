@@ -63,6 +63,7 @@ create_config_directories(){
       mkdir $HOME/.config
       mkdir $HOME/.config/xfce4
       mkdir $HOME/.config/redshift
+      mkdir $HOME/.config/autostart
       mkdir -p $HOME/.config/Code/User
   fi
 }
