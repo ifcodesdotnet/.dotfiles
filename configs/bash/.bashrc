@@ -100,12 +100,17 @@ fi
 
 alias l='ls -l'
 alias ll='ls -lA'
+
 alias d='cd ~/.dotfiles/'
 alias s='cd ~/.dotfiles/scripts'
 alias c='cd ~/.dotfiles/configs'
+
 alias dtc='dotnet clean'
 alias dtr='dotnet run'
 alias dtb='dotnet build'
 
 export PATH=~/.dotfiles/scripts:$PATH
 export PATH=~/.dotfiles/scripts/bootstrap:$PATH
+
+
+#https://unix.stackexchange.com/questions/1288/preserve-bash-history-in-multiple-terminal-windows
