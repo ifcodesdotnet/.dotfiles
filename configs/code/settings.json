@@ -8,7 +8,7 @@
     "update.mode": "none",
     "explorer.confirmDragAndDrop": false,
     "explorer.confirmDelete": false,
-    "workbench.colorTheme": "Horizon",
+    "workbench.colorTheme": "Horizon Dark",
     "window.menuBarVisibility": "toggle",
     "explorer.compactFolders": false,
     "editor.mouseWheelZoom": true
