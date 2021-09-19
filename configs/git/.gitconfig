@@ -1,3 +1,5 @@
 [user]
 	name = Ismael Fernandez
 	email = ishy360@gmail.com
+[core]
+	editor = code --wait
