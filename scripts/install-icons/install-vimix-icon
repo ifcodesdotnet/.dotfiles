@@ -1,0 +1,20 @@
+#!/bin/bash
+#
+# Script name: install-vimix-icon
+# Description: 
+# Dependencies: git
+# GitHub: https://github.com/ifcodesdotnet/.dotfiles
+# Contributors: Ismael Fernandez
+
+sudo echo > /dev/null 2>&1
+
+download_vimix_icon(){
+  sudo git -C /usr/share/icons/ clone https://github.com/vinceliuice/vimix-icon-theme.git
+}
+
+install_vimix_icon(){
+  sudo /usr/share/icons/vimix-icon-theme/install.sh -a -d /usr/share/icons
+}
+
+download_vimix_icon
+install_vimix_icon

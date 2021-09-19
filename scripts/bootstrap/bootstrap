@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Script name: bootstrap-xfce
+# Script name: bootstrap
 # Description: Install xfce4 with my preferred applications and configurations.
 # Dependencies: gpg, apt-transport-https
 # GitHub: https://github.com/ifcodesdotnet/.dotfiles
@@ -82,17 +82,11 @@ install_vscode_extensions(){
 }
 
 install_vimix_theme(){
-  echo installing vimix theme
-
-  sudo git -C /usr/share/themes/ clone https://github.com/vinceliuice/vimix-gtk-themes.git
-  sudo /usr/share/themes/vimix-gtk-themes/install.sh -a -d /usr/share/themes
+  ~/.dotfiles/scripts/install-themes/install-vimix-theme
 }
 
 install_vimix_icon(){
-  echo installing vimix icon theme
-
-  sudo git -C /usr/share/icons/ clone https://github.com/vinceliuice/vimix-icon-theme.git
-  sudo /usr/share/icons/vimix-icon-theme/install.sh -a -d /usr/share/icons
+  ~/.dotfiles/scripts/install-icons/install-vimix-icon
 }
 
 restore_interfaces_file(){
