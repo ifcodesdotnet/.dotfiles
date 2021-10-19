@@ -16,7 +16,9 @@ apt_packages+=("libsass1")
 
 #apt_packages+=("synaptic")
 #apt_packages+=("firefox-esr")
-#apt_packages+=("redshift-gtk")
+
+apt_packages+=("redshift-gtk")
+
 #apt_packages+=("evince")
 #apt_packages+=("ristretto")
 #apt_packages+=("rclone")
