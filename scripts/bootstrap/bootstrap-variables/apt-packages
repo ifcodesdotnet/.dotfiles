@@ -21,7 +21,7 @@ apt_packages+=("redshift-gtk")
 
 #apt_packages+=("evince")
 #apt_packages+=("ristretto")
-#apt_packages+=("rclone")
+apt_packages+=("rclone")
 #apt_packages+=("thunderbird")
 #apt_packages+=("telegram-desktop")
 #apt_packages+=("blueman")

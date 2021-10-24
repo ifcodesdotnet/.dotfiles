@@ -1,0 +1,2 @@
+#!/bin/bash
+declare -A cloud_storage_map
