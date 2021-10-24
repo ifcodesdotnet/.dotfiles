@@ -1,5 +1,10 @@
 [user]
-	name = Ismael Fernandez
-	email = ishy360@gmail.com
+  name = Ismael Fernandez
+  email = ishy360@gmail.com
 [core]
-	editor = code --wait
+  editor = code --wait
+[alias]
+  s = status
+  l = log
+  ba = branch -a
+  c = checkout
