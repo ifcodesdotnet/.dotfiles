@@ -1,4 +1,4 @@
-Command=/home/USERNAME/.dotfiles/scripts/generic-monitor/kbdleds
+Command=/home/i/.dotfiles/scripts/generic-monitor/kbdleds
 UseLabel=0
 Text=(genmon)
 UpdatePeriod=250
