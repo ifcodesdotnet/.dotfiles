@@ -85,7 +85,8 @@ apply_stow_configurations(){
 update_genmon_script_location(){
   user=$(whoami)
   file="~/.dotfiles/configs/xfce4/panel/genmon-1.rc"
-  sed -i 's/USERNAME/'$user'/g' $file
+  #sed -i 's/USERNAME/'$user'/g' $file
+  sed -i s/USERNAME/$user/g ~/.dotfiles/configs/xfce4/panel/genmon-1.rc
 }
 
 install_vscode(){
