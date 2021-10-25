@@ -82,6 +82,7 @@ apply_stow_configurations(){
   done
 }
 
+#config file has my username hardcoded in file, need this function to make script more dynamic
 update_genmon_script_location(){
   user=$(whoami)
   #https://stackoverflow.com/questions/30871868/sed-replace-first-occurence-in-place-with-big-files
