@@ -86,10 +86,6 @@ update_genmon_script_location(){
   user=$(whoami)
   #https://stackoverflow.com/questions/30871868/sed-replace-first-occurence-in-place-with-big-files
   #https://linuxconfig.org/how-to-substitute-only-a-first-match-occurrence-using-sed-command
-  #https://linuxconfig.org/how-to-substitute-only-a-first-match-occurrence-using-sed-command
-  #sed -i '1 s/i/'$user'/' ~/.dotfiles/configs/xfce4/panel/genmon-1.rc
-
-  #sed -i '0,/i/s//sara/' ~/.dotfiles/configs/xfce4/panel/genmon-1.rc
   sed -i '0,/i/s//'$user'/' ~/.dotfiles/configs/xfce4/panel/genmon-1.rc
 }
 
