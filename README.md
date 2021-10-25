@@ -6,3 +6,4 @@ Working on standalone vscode install script
  - [xfce4 Bootstrap Script](https://raw.githubusercontent.com/ifcodesdotnet/.dotfiles/master/scripts/bootstrap/bootstrap)
  - [Install Visual Studio Code](https://raw.githubusercontent.com/ifcodesdotnet/.dotfiles/master/scripts/install-software/install-vscode)
  - [Install Vimix Icons](https://raw.githubusercontent.com/ifcodesdotnet/.dotfiles/master/scripts/install-icons/install-vimix-icon)
+ - [Install Vimix Theme](https://raw.githubusercontent.com/ifcodesdotnet/.dotfiles/master/scripts/install-themes/install-vimix-theme)
