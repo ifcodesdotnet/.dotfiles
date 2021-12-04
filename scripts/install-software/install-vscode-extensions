@@ -14,6 +14,8 @@ vscode_extensions+=("PKief.material-icon-theme")
 vscode_extensions+=("jolaleye.horizon-theme-vscode")
 vscode_extensions+=("ms-dotnettools.csharp")
 vscode_extensions+=("ms-azuretools.vscode-docker")
+vscode_extensions+=("eamodio.gitlens")
+vscode_extensions+=("alefragnani.Bookmarks")
 
 for extension in "${!vscode_extensions[@]}";
 do
