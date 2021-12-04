@@ -50,17 +50,11 @@ install_apt_packages(){
   done
 }
 
-#do i even need this ?
-#cant i just delete everything inside the home directory
-#rm -rf !(.bashrc)
-#https://superuser.com/questions/529854/how-to-delete-all-files-in-a-directory-except-some/529861#529861
-
 stow_targets_to_delete(){
-  # for target in "${stow_targets_to_delete[@]}";
-  # do
-  #   sudo rm -rf $target
-      sudo rm -rf ~/*
-  # done
+  for target in "${stow_targets_to_delete[@]}";
+  do
+    sudo rm -rf $target
+  done
 }
 
 create_config_directories(){
@@ -126,9 +120,7 @@ install_apt_packages
 stow_targets_to_delete
 create_config_directories
 apply_stow_configurations
-
 update_genmon_script_location
-
 install_vscode
 install_vscode_extensions
 install_vimix_theme
