@@ -11,30 +11,42 @@
 #
 #   https://stackoverflow.com/questions/64786/error-handling-in-bash
 #     Error handling in bash
-#
-#
-
-
-
-
-
-
-
-
+#   
+#   https://unix.stackexchange.com/questions/28791/prompt-for-sudo-password-and-programmatically-elevate-privilege-in-bash-script
+#     Prompt user for sudo access in script
 
 log_error_exit(){
     echo $1 && exit
 }
 
-#I might be able to change this to install_bootstrap_dependencies?
+update_apt_cache(){
+    echo updating apt cache.
+
+    sudo apt update -y
+
+    if [ $? -ne 0 ]; then
+        log_error_exit "failure updating apt cache."
+    fi
+}
+
+upgrade_apt_packages(){
+    echo upgrading apt packages.
+    
+    sudo apt upgrade -y
+
+    if [ $? -ne 0 ]; then
+        log_error_exit "failure upgrading apt packages."
+    fi
+}
+
 install_jq(){
+    #I might be able to change this to install_bootstrap_dependencies?
     sudo apt install -y jq
 
     if [ $? -ne 0 ]; then
         log_error_exit "Error installing jq!"
     fi
 }
-
 
 install_apt_packages(){
     local readonly apt_packages="$(jq -r .\"apt-packages\"[] $HOME/.dotfiles/scripts/bootstrap/bootstrap.json)"
@@ -49,15 +61,13 @@ install_apt_packages(){
 }
 
 main(){
-    #https://unix.stackexchange.com/questions/28791/prompt-for-sudo-password-and-programmatically-elevate-privilege-in-bash-script
-    #Prompt user for sudo acces 
     if [ $EUID != 0 ]; then
         sudo "$0" "$@"
         exit $?
     fi
 
-    install_jq
-    install_apt_packages
+    #install_jq
+    #install_apt_packages
 }
 
 main
