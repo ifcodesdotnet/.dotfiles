@@ -17,15 +17,24 @@
 
 
 
-#NEED TO INSTALL JQ BEFORE DOING ANY OF THIG
-#install_jq(){
-#    
-#}
+
+
+
 
 
 log_error_exit(){
     echo $1 && exit
-} 
+}
+
+#I might be able to change this to install_bootstrap_dependencies?
+install_jq(){
+    sudo apt install -y jq
+
+    if [ $? -ne 0 ]; then
+        log_error_exit "Error installing jq!"
+    fi
+}
+
 
 install_apt_packages(){
     local readonly apt_packages="$(jq -r .\"apt-packages\"[] $HOME/.dotfiles/scripts/bootstrap/bootstrap.json)"
@@ -40,6 +49,14 @@ install_apt_packages(){
 }
 
 main(){
+    #https://unix.stackexchange.com/questions/28791/prompt-for-sudo-password-and-programmatically-elevate-privilege-in-bash-script
+    #Prompt user for sudo acces 
+    if [ $EUID != 0 ]; then
+        sudo "$0" "$@"
+        exit $?
+    fi
+
+    install_jq
     install_apt_packages
 }
 
