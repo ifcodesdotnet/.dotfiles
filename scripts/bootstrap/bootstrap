@@ -2,128 +2,196 @@
 #
 # Script name: bootstrap
 # Description: Install xfce4 with my preferred applications and configurations.
-# Dependencies: gpg, apt-transport-https
+# Dependencies: jq
 # GitHub: https://github.com/ifcodesdotnet/.dotfiles
 # Contributors: Ismael Fernandez
+# Sources:
+#   https://google.github.io/styleguide/shellguide.html
+#     Shell scripting coding guidelines
+#
+#   https://stackoverflow.com/questions/64786/error-handling-in-bash
+#     Error handling in bash
+#
+#
 
-source $HOME/.dotfiles/scripts/bootstrap/bootstrap-variables/apt-packages
-source $HOME/.dotfiles/scripts/bootstrap/bootstrap-variables/stow-targets
-source $HOME/.dotfiles/scripts/bootstrap/bootstrap-variables/stow-targets-to-delete
 
-sudo echo > /dev/null 2>&1
 
-update_apt_cache(){
-  echo updating apt cache.
 
-  sudo apt update -y
-  if [ $? -ne 0 ];
-  then
-      clear
-      echo failure updating apt cache.
-      exit
-  fi
-}
+#NEED TO INSTALL JQ BEFORE DOING ANY OF THIG
+#install_jq(){
+#    
+#}
 
-upgrade_apt_packages(){
-  echo upgrading apt packages.
 
-  sudo apt upgrade -y
-  if [ $? -ne 0 ];
-  then
-      clear
-      echo failure upgrading apt packages.
-      exit
-  fi
-}
+log_error_exit(){
+    echo $1 && exit
+} 
 
 install_apt_packages(){
-  for package in "${!apt_packages[@]}";
-  do
+    local readonly apt_packages="$(jq -r .\"apt-packages\"[] $HOME/.dotfiles/scripts/bootstrap/bootstrap.json)"
 
-    sudo apt install -y ${apt_packages[$package]}
-    if [ $? -ne 0 ];
-    then
-        clear
-        echo failure installing ${apt_packages[$package]}.
-        exit
-    fi
-  done
+    for package in $apt_packages; do
+        sudo apt install -y ${package}
+
+        if [ $? -ne 0 ]; then
+            log_error_exit "Error installing ${package}"
+        fi
+    done
 }
 
-stow_targets_to_delete(){
-  for target in "${stow_targets_to_delete[@]}";
-  do
-    sudo rm -rf $target
-  done
+main(){
+    install_apt_packages
 }
 
-create_config_directories(){
-  if [ ! -d "$HOME/.config" ]
-  then
-      mkdir $HOME/.config
-      mkdir $HOME/.config/xfce4
-      mkdir $HOME/.config/redshift
-      mkdir $HOME/.config/autostart
-      mkdir -p $HOME/.config/Code/User
-      mkdir $HOME/source
-  fi
-}
+main
 
-apply_stow_configurations(){
-  for target in "${!stow_targets[@]}";
-  do
-    stow -v -d $HOME/.dotfiles/configs -t $HOME/${stow_targets[$target]} $target
-  done
-}
 
-#config file has my username hardcoded in file, need this function to make script more dynamic
-update_genmon_script_location(){
-  user=$(whoami)
-  #https://stackoverflow.com/questions/30871868/sed-replace-first-occurence-in-place-with-big-files
-  #https://linuxconfig.org/how-to-substitute-only-a-first-match-occurrence-using-sed-command
-  sed -i '0,/i/s//'$user'/' ~/.dotfiles/configs/xfce4/panel/genmon-1.rc
-}
 
-install_vscode(){
-  ~/.dotfiles/scripts/install-software/install-vscode
-}
 
-install_vscode_extensions(){
-  ~/.dotfiles/scripts/install-software/install-vscode-extensions
-}
 
-install_vimix_theme(){
-  ~/.dotfiles/scripts/install-themes/install-vimix-theme
-}
 
-install_vimix_icon(){
-  ~/.dotfiles/scripts/install-icons/install-vimix-icon
-}
 
-restore_interfaces_file(){
-  echo begin restoration of interfaces file
 
-  head -8 /etc/network/interfaces > ~/interfaces
-  sudo rm /etc/network/interfaces
-  sudo mv ~/interfaces /etc/network/interfaces
-}
 
-restart_system(){
-  echo system bootstrapping complete, restarting now . . .
-  sleep 1
-  sudo reboot
-}
 
-update_apt_cache
-upgrade_apt_packages
-install_apt_packages
-stow_targets_to_delete
-create_config_directories
-apply_stow_configurations
-update_genmon_script_location
-install_vscode
-install_vscode_extensions
-install_vimix_theme
-install_vimix_icon
-restore_interfaces_file
-restart_system
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# source $HOME/.dotfiles/scripts/bootstrap/bootstrap-variables/apt-packages
+# source $HOME/.dotfiles/scripts/bootstrap/bootstrap-variables/stow-targets
+# source $HOME/.dotfiles/scripts/bootstrap/bootstrap-variables/stow-targets-to-delete
+
+# sudo echo > /dev/null 2>&1
+
+# update_apt_cache(){
+#   echo updating apt cache.
+
+#   sudo apt update -y
+#   if [ $? -ne 0 ];
+#   then
+#       clear
+#       echo failure updating apt cache.
+#       exit
+#   fi
+# }
+
+# upgrade_apt_packages(){
+#   echo upgrading apt packages.
+
+#   sudo apt upgrade -y
+#   if [ $? -ne 0 ];
+#   then
+#       clear
+#       echo failure upgrading apt packages.
+#       exit
+#   fi
+# }
+
+# install_apt_packages(){
+#   for package in "${!apt_packages[@]}";
+#   do
+
+#     sudo apt install -y ${apt_packages[$package]}
+#     if [ $? -ne 0 ];
+#     then
+#         clear
+#         echo failure installing ${apt_packages[$package]}.
+#         exit
+#     fi
+#   done
+# }
+
+# stow_targets_to_delete(){
+#   for target in "${stow_targets_to_delete[@]}";
+#   do
+#     sudo rm -rf $target
+#   done
+# }
+
+# create_config_directories(){
+#   if [ ! -d "$HOME/.config" ]
+#   then
+#       mkdir $HOME/.config
+#       mkdir $HOME/.config/xfce4
+#       mkdir $HOME/.config/redshift
+#       mkdir $HOME/.config/autostart
+#       mkdir -p $HOME/.config/Code/User
+#       mkdir $HOME/source
+#   fi
+# }
+
+# apply_stow_configurations(){
+#   for target in "${!stow_targets[@]}";
+#   do
+#     stow -v -d $HOME/.dotfiles/configs -t $HOME/${stow_targets[$target]} $target
+#   done
+# }
+
+# #config file has my username hardcoded in file, need this function to make script more dynamic
+# update_genmon_script_location(){
+#   user=$(whoami)
+#   #https://stackoverflow.com/questions/30871868/sed-replace-first-occurence-in-place-with-big-files
+#   #https://linuxconfig.org/how-to-substitute-only-a-first-match-occurrence-using-sed-command
+#   sed -i '0,/i/s//'$user'/' ~/.dotfiles/configs/xfce4/panel/genmon-1.rc
+# }
+
+# install_vscode(){
+#   ~/.dotfiles/scripts/install-software/install-vscode
+# }
+
+# install_vscode_extensions(){
+#   ~/.dotfiles/scripts/install-software/install-vscode-extensions
+# }
+
+# install_vimix_theme(){
+#   ~/.dotfiles/scripts/install-themes/install-vimix-theme
+# }
+
+# install_vimix_icon(){
+#   ~/.dotfiles/scripts/install-icons/install-vimix-icon
+# }
+
+# restore_interfaces_file(){
+#   echo begin restoration of interfaces file
+
+#   head -8 /etc/network/interfaces > ~/interfaces
+#   sudo rm /etc/network/interfaces
+#   sudo mv ~/interfaces /etc/network/interfaces
+# }
+
+# restart_system(){
+#   echo system bootstrapping complete, restarting now . . .
+#   sleep 1
+#   sudo reboot
+# }
+
+# update_apt_cache
+# upgrade_apt_packages
+# install_apt_packages
+# stow_targets_to_delete
+# create_config_directories
+# apply_stow_configurations
+# update_genmon_script_location
+# install_vscode
+# install_vscode_extensions
+# install_vimix_theme
+# install_vimix_icon
+# restore_interfaces_file
+# restart_system

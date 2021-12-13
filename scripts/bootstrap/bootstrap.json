@@ -1,0 +1,47 @@
+{
+    "apt-packages": [
+        "sudo",
+        "git",
+        "stow",
+        "apt-transport-https",
+        "xfce4",
+        "xfce4-power-manager",
+        "xfce4-terminal",
+        "xfce4-genmon-plugin",
+        "xfce4-taskmanager",
+        "thunar-archive-plugin",
+        "network-manager-gnome",
+        "gvfs-backends",
+        "libsass1",
+        "redshift-gtk",
+        "synaptic",
+        "firefox-esr",
+        "evince",
+        "ristretto",
+        "rclone",
+        "thunderbird",
+        "telegram-desktop",
+        "blueman"
+    ],
+    "stow-targets": [
+        {
+            "name": "git",
+            "folder": [
+                "~"
+            ]
+        },
+        {
+            "name": "bash",
+            "folder": [
+                "~"
+            ]
+        },
+        {
+            "name": "ugly-test",
+            "folder": [
+                "cool",
+                "nice-one-ismael"
+            ]
+        }
+    ]
+}
