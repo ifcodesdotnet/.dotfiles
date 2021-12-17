@@ -60,46 +60,66 @@ install_apt_packages(){
     done
 }
 
-stow_targets_to_delete(){
-    local readonly apt_packages="$(jq -r .\"apt-packages\"[] $HOME/.dotfiles/scripts/bootstrap/bootstrap.json)"
+function stow(){
+    local readonly packages="$(jq -r .\"stow\"[].package $json_config)"
+
+    for package in ${packages[@]}; do
+        local target="$(jq -r ".\"stow\"[] | select(.package==\"$package\") .directory" $json_config)"
+        #echo "$target" "$package"
+        echo "$package"
+        #echo stow -v -d /home/i/.dotfiles/configs -t "$target" "$package" 
+
+        #what do i name this ?
+        #this variable has both files and folders that need to be removed before running the stow command 
+        local existing_locations="$(jq -r ".\"stow\"[] | select(.package==\"$package\") .files | .[]" $json_config)"
+
+
+        #how to get multiple arrays out of a json file with jq
+        #jq -r ".\"stow\"[] | select(.package==\"xfce4\") .test[], .files[]" /home/i/.dotfiles/scripts/bootstrap/bootstrap.json
+        #jq -r ".\"stow\"[] | select(.package==\"code\") .package, .files[]" /home/i/.dotfiles/scripts/bootstrap/bootstrap.json
 
 
 
-  for target in "${stow_targets_to_delete[@]}"; do
-    sudo rm -rf $target
-  done
-}
-
-
-#https://askubuntu.com/questions/425754/how-do-i-run-a-sudo-command-inside-a-script
-
-#https://www.baeldung.com/linux/store-command-in-variable
-function stow_packages_v2(){
-    local readonly config="/home/i/.dotfiles/scripts/bootstrap/bootstrap.json"
-
-    local readonly stow_packages="$(jq -r .\"stow-targets\"[].name /home/i/.dotfiles/scripts/bootstrap/bootstrap.json)"
-
-    for package in ${stow_packages[@]}; do
-        local target="$(jq -r ".\"stow-targets\"[] | select(.name==\"$package\") .folder | .[]" /home/i/.dotfiles/scripts/bootstrap/bootstrap.json)"
+        for location in ${existing_locations[@]}; do
+            echo "$location"
+            
+            if [ $? -ne 0 ]; then
+                log_error_exit "Error"
+            fi
+        done
         
-        echo stow -v -d /home/i/.dotfiles/configs -t /home/i/"$target" "$package" 
-        # for target in ${targets[@]}; do
-        #     #echo $target
-        #     #echo stow -v -d /home/i/.dotfiles/configs -t /home/i/
-        #     #echo stow -v -d /home/i/.dotfiles/configs -t /home/i/ "$package"
-        # done
+        echo ""
     done
 }
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 main(){
-    real_user=$(logname)
-    if [ $EUID != 0 ]; then
-        sudo "$0" "$@"
-        exit $?
-    fi
-    echo $real_user
+    # real_user=$(logname)
+    # if [ $EUID != 0 ]; then
+    #     sudo "$0" "$@"
+    #     exit $?
+    # fi
+    # echo $real_user
+    readonly json_config="/home/i/.dotfiles/scripts/bootstrap/bootstrap.json"
+    stow
 
     #https://stackoverflow.com/questions/3522341/identify-user-in-a-bash-script-called-by-sudo
 
@@ -145,7 +165,24 @@ main
 
 
 
+# #https://askubuntu.com/questions/425754/how-do-i-run-a-sudo-command-inside-a-script
+# #https://www.baeldung.com/linux/store-command-in-variable
+# function stow_packages_v2(){
+#     #local readonly config="/home/i/.dotfiles/scripts/bootstrap/bootstrap.json"
 
+#     local readonly stow_packages="$(jq -r .\"stow-targets\"[].name /home/i/.dotfiles/scripts/bootstrap/bootstrap.json)"
+
+#     for package in ${stow_packages[@]}; do
+#         local target="$(jq -r ".\"stow-targets\"[] | select(.name==\"$package\") .folder | .[]" /home/i/.dotfiles/scripts/bootstrap/bootstrap.json)"
+        
+#         echo stow -v -d /home/i/.dotfiles/configs -t /home/i/"$target" "$package" 
+#         # for target in ${targets[@]}; do
+#         #     #echo $target
+#         #     #echo stow -v -d /home/i/.dotfiles/configs -t /home/i/
+#         #     #echo stow -v -d /home/i/.dotfiles/configs -t /home/i/ "$package"
+#         # done
+#     done
+# }
 
 
 

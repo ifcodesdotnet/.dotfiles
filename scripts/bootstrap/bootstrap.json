@@ -48,14 +48,38 @@
                 ".config/xfce4/"
             ]
         }
-    ], 
-    "stow-targets-to-delete":[
-        "~/.gitconfig",
-        "~/.bashrc",
-        "~/.profile", 
-        "~/.config/xfce4/xfconf",
-        "~/.config/xfce4/panel",
-        "~/.config/Code/User/keybindings.json",
-        "~/.config/Code/User/settings.json"
+    ],
+    "stow": [
+        {
+            "package": "git",
+            "directory": "",
+            "files":[
+                "~/.gitconfig"
+            ]
+        },
+        {
+            "package": "bash",
+            "directory": "", 
+            "files":[
+                "~/.bashrc",
+                "~/.profile"
+            ]
+        },
+        {
+            "package": "code",
+            "directory": ".config/Code/User", 
+            "files":[
+                "~/.config/Code/User/keybindings.json", 
+                "~/.config/Code/User/settings.json"
+            ]
+        },
+        {
+            "package": "xfce4",
+            "directory": ".config/xfce4/",
+            "files":[
+                "~/.config/xfce4/xfconf",
+                "~/.config/xfce4/panel"
+            ]
+        }
     ]
 }
