@@ -37,11 +37,25 @@
             ]
         },
         {
-            "name": "ugly-test",
+            "name": "code",
             "folder": [
-                "cool",
-                "nice-one-ismael"
+                ".config/Code/User"
+            ]
+        },
+        {
+            "name": "xfce4",
+            "folder": [
+                ".config/xfce4/"
             ]
         }
+    ], 
+    "stow-targets-to-delete":[
+        "~/.gitconfig",
+        "~/.bashrc",
+        "~/.profile", 
+        "~/.config/xfce4/xfconf",
+        "~/.config/xfce4/panel",
+        "~/.config/Code/User/keybindings.json",
+        "~/.config/Code/User/settings.json"
     ]
 }
