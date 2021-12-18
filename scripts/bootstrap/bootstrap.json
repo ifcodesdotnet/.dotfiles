@@ -81,5 +81,15 @@
                 "~/.config/xfce4/panel"
             ]
         }
+    ], 
+    "test": [        
+        {
+            "package": "sara",
+            "directory": ".config/sara/",
+            "files":[
+                ".config/sara/index.html",
+                ".config/sara/scripts.js"
+            ]
+        }
     ]
 }

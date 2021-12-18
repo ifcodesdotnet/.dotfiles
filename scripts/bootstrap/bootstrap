@@ -61,20 +61,25 @@ install_apt_packages(){
 }
 
 stow(){
-    local readonly packages="$(jq -r .\"stow\"[].package $json_config)"
+    local readonly packages="$(jq -r .\"test\"[].package $json_config)"
 
+    #syncing configuration one stow package at a time 
     for package in ${packages[@]}; do
-        local stow_locations="$(jq -r ".\"stow\"[] | select(.package==\"$package\") | .directory, .files[]" $json_config)"
 
+        local stow_locations="$(jq -r ".\"test\"[] | select(.package==\"$package\") | .directory, .files[]" $json_config)"
+
+        #Before configuration can be applied pre existing / default files and directories must be deleted
         for location in ${stow_locations[@]}; do
-            echo sudo rm -rf "$location"
+            sudo rm -rf $HOME/"$location"
         done
+        
+        local directories="$(jq -r ".\"test\"[] | select(.package==\"$package\") .directory" $json_config)"
 
-        local stow_target="$(jq -r ".\"stow\"[] | select(.package==\"$package\") .directory" $json_config)"
-
-        echo stow -v -d /home/i/.dotfiles/configs -t "$stow_target" "$package" 
-        echo ""
-
+        #Finally apply configuration each for each package each directory at a time
+        for directory in ${directories[@]}; do
+             sudo mkdir $HOME/$directory
+             sudo stow -v -d /home/i/.dotfiles/configs -t $HOME/"$directory" "$package"
+        done
     done
 }
 
@@ -82,7 +87,9 @@ stow(){
 
 
 
-
+# jq -r ".\"stow\"[] | select(.package==\"sara\") | .directory" /home/i/.dotfiles/scripts/bootstrap/bootstrap.json
+#jq -r ".\"test\"[] | select(.package==\"sara\") .directory" /home/i/.dotfiles/scripts/bootstrap/bootstrap.json
+#stow -v -d /home/i/.dotfiles/configs -t /home/i/.config/sara/ sara
 
 
         #local target="$(jq -r ".\"stow\"[] | select(.package==\"$package\") .directory" $json_config)"
