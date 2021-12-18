@@ -2,7 +2,7 @@
 #
 # Script name: bootstrap
 # Description: Install xfce4 with my preferred applications and configurations.
-# Dependencies: jq
+# Dependencies: jq, sed, stow
 # GitHub: https://github.com/ifcodesdotnet/.dotfiles
 # Contributors: Ismael Fernandez
 # Sources:
@@ -39,6 +39,9 @@ upgrade_apt_packages(){
     fi
 }
 
+
+#move this code to the install apt packages function,
+#
 install_jq(){
     #I might be able to change this to install_bootstrap_dependencies?
     sudo apt install -y jq
@@ -70,15 +73,15 @@ stow(){
 
         #Before configuration can be applied pre existing / default files and directories must be deleted
         for location in ${stow_locations[@]}; do
-            sudo rm -rf $HOME/"$location"
+            sudo rm -rf /home/$(logname)/"$location"
         done
         
         local directories="$(jq -r ".\"test\"[] | select(.package==\"$package\") .directory" $json_config)"
 
         #Finally apply configuration each for each package each directory at a time
         for directory in ${directories[@]}; do
-             sudo mkdir $HOME/$directory
-             sudo stow -v -d /home/i/.dotfiles/configs -t $HOME/"$directory" "$package"
+            sudo mkdir /home/$(logname)/"$directory"
+            sudo stow -v -d /home/$(logname)/.dotfiles/configs -t /home/$(logname)/"$directory" "$package"
         done
     done
 }
@@ -169,23 +172,19 @@ stow(){
 
 
 main(){
-    # real_user=$(logname)
-    # if [ $EUID != 0 ]; then
-    #     sudo "$0" "$@"
-    #     exit $?
-    # fi
-    # echo $real_user
+    if [ $EUID != 0 ]; then
+        sudo "$0" "$@"
+        exit $?
+    fi
+
     readonly json_config="/home/i/.dotfiles/scripts/bootstrap/bootstrap.json"
+    
+    
+
+
     stow
 
     #https://stackoverflow.com/questions/3522341/identify-user-in-a-bash-script-called-by-sudo
-
-
-    # if [ $SUDO_USER ]; then
-    #     real_user=$SUDO_USER
-    # else
-    #     real_user=$(whoami)
-    # fi
 
 
     #update_apt_cache

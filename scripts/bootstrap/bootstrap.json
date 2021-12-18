@@ -82,7 +82,7 @@
             ]
         }
     ], 
-    "test": [        
+    "test": [
         {
             "package": "sara",
             "directory": ".config/sara/",
