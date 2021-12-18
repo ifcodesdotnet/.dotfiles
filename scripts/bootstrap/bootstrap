@@ -173,9 +173,7 @@ main(){
         sudo "$0" "$@"
         exit $?
     fi
-
-
-    
+#GLOBALS
     readonly json_config="/home/$(logname)/.dotfiles/scripts/bootstrap/bootstrap.json"
 
     
