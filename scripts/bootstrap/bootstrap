@@ -60,37 +60,87 @@ install_apt_packages(){
     done
 }
 
-function stow(){
+stow(){
     local readonly packages="$(jq -r .\"stow\"[].package $json_config)"
 
     for package in ${packages[@]}; do
-        local target="$(jq -r ".\"stow\"[] | select(.package==\"$package\") .directory" $json_config)"
-        #echo "$target" "$package"
-        echo "$package"
+        local stow_locations="$(jq -r ".\"stow\"[] | select(.package==\"$package\") | .directory, .files[]" $json_config)"
+
+        for location in ${stow_locations[@]}; do
+            echo sudo rm -rf "$location"
+        done
+
+        local stow_target="$(jq -r ".\"stow\"[] | select(.package==\"$package\") .directory" $json_config)"
+
+        echo stow -v -d /home/i/.dotfiles/configs -t "$stow_target" "$package" 
+        echo ""
+
+    done
+}
+
+
+
+
+
+
+
+
+        #local target="$(jq -r ".\"stow\"[] | select(.package==\"$package\") .directory" $json_config)"
+
+
+
+
+        #this var is going to have all the folder and files with config
+        #local existing_locations="$(jq -r ".\"stow\"[] | select(.package==\"code\") .directory, .files[]" $json_con)"
+
+
+
+        #jq -r ".\"stow\"[] | select(.package==\"code\") | .directory, .files[]" /home/i/.dotfiles/scripts/bootstrap/bootstrap.json
+
+
+
+
+
+
+
+
+        
+        
         #echo stow -v -d /home/i/.dotfiles/configs -t "$target" "$package" 
 
         #what do i name this ?
         #this variable has both files and folders that need to be removed before running the stow command 
-        local existing_locations="$(jq -r ".\"stow\"[] | select(.package==\"$package\") .files | .[]" $json_config)"
+        #local existing_locations="$(jq -r ".\"stow\"[] | select(.package==\"$package\") .files | .[]" $json_config)"
+
+
 
 
         #how to get multiple arrays out of a json file with jq
         #jq -r ".\"stow\"[] | select(.package==\"xfce4\") .test[], .files[]" /home/i/.dotfiles/scripts/bootstrap/bootstrap.json
-        #jq -r ".\"stow\"[] | select(.package==\"code\") .package, .files[]" /home/i/.dotfiles/scripts/bootstrap/bootstrap.json
-
-
-
-        for location in ${existing_locations[@]}; do
-            echo "$location"
-            
-            if [ $? -ne 0 ]; then
-                log_error_exit "Error"
-            fi
-        done
         
-        echo ""
-    done
-}
+        # i can get the directories and remove them before i do anything 
+
+
+
+
+
+        # for location in ${existing_locations[@]}; do
+        #     echo "$location"
+            
+        #     if [ $? -ne 0 ]; then
+        #         log_error_exit "Error"
+        #     fi
+        # done
+        
+        # echo ""
+
+
+
+
+
+
+
+
 
 
 
