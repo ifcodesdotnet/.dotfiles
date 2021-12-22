@@ -85,10 +85,18 @@
     "test": [
         {
             "package": "sara",
-            "directory": ".config/sara/",
+            "directory": "/home/$(logname)/.config/sara",
             "files":[
-                ".config/sara/index.html",
-                ".config/sara/scripts.js"
+                "/home/$(logname)/.config/sara/index.html",
+                "/home/$(logname)/.config/sara/scripts.js"
+            ]
+        }, 
+        {
+            "package": "sara",
+            "directory": "/home/$(logname)",
+            "files":[
+                "/home/$(logname)/index.html",
+                "/home/$(logname)/scripts.js"
             ]
         }
     ]

@@ -70,15 +70,17 @@ stow(){
 
         #Before configuration can be applied pre existing / default files and directories must be deleted
         for location in ${stow_locations[@]}; do
-            sudo rm -rf /home/$(logname)/"$location"
+            if [[ "$(eval echo $location)" != "$(eval echo /home/$(logname))" ]]; then
+                eval sudo rm -rf "$location"
+            fi
         done
         
         local directories="$(jq -r ".\"test\"[] | select(.package==\"$package\") .directory" $json_config)"
 
         #Finally apply configuration each for each package each directory at a time
         for directory in ${directories[@]}; do
-            sudo mkdir -p /home/$(logname)/"$directory"
-            sudo stow -v -d /home/$(logname)/.dotfiles/configs -t /home/$(logname)/"$directory" "$package"
+            eval sudo mkdir -p "$directory"
+            eval sudo stow -v -d /home/$(logname)/.dotfiles/configs -t "$directory" "$package"
         done
     done
 }
@@ -184,7 +186,24 @@ main(){
     #update_apt_cache
     #upgrade_apt_packages
     #install_apt_packages
-    #stow
+    
+    stow
+
+    #  location="/home/$(logname)"
+    #  echo "$location"
+    #  if [[ "$location" != "/home/$(logname)" ]]; then
+    #      echo "omg"
+    #  else 
+    #     echo "sara"
+    #  fi
+
+    # location="/home/$(logname)"
+
+    # if [[ "$(echo eval $location)" != "$(echo eval /home/$(logname))" ]]; then
+    #     eval echo $location
+    # else
+    #     echo "test"
+    # fi
 
 
 
