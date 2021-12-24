@@ -52,17 +52,17 @@
     "stow": [
         {
             "package": "git",
-            "directory": "",
+            "directory": "/home/$(logname)",
             "files":[
-                ".gitconfig"
+                "/home/$(logname)/.gitconfig"
             ]
         },
         {
             "package": "bash",
-            "directory": "", 
+            "directory": "/home/$(logname)", 
             "files":[
-                ".bashrc",
-                ".profile"
+                "/home/$(logname)/.bashrc",
+                "/home/$(logname)/.profile"
             ]
         },
         {
