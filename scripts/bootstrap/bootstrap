@@ -85,138 +85,6 @@ stow(){
     done
 }
 
-
-
-
-
-# jq -r ".\"stow\"[] | select(.package==\"sara\") | .directory" /home/i/.dotfiles/scripts/bootstrap/bootstrap.json
-#jq -r ".\"test\"[] | select(.package==\"sara\") .directory" /home/i/.dotfiles/scripts/bootstrap/bootstrap.json
-#stow -v -d /home/i/.dotfiles/configs -t /home/i/.config/sara/ sara
-
-
-        #local target="$(jq -r ".\"stow\"[] | select(.package==\"$package\") .directory" $json_config)"
-
-
-
-
-        #this var is going to have all the folder and files with config
-        #local existing_locations="$(jq -r ".\"stow\"[] | select(.package==\"code\") .directory, .files[]" $json_con)"
-
-
-
-        #jq -r ".\"stow\"[] | select(.package==\"code\") | .directory, .files[]" /home/i/.dotfiles/scripts/bootstrap/bootstrap.json
-
-
-
-
-
-
-
-
-        
-        
-        #echo stow -v -d /home/i/.dotfiles/configs -t "$target" "$package" 
-
-        #what do i name this ?
-        #this variable has both files and folders that need to be removed before running the stow command 
-        #local existing_locations="$(jq -r ".\"stow\"[] | select(.package==\"$package\") .files | .[]" $json_config)"
-
-
-
-
-        #how to get multiple arrays out of a json file with jq
-        #jq -r ".\"stow\"[] | select(.package==\"xfce4\") .test[], .files[]" /home/i/.dotfiles/scripts/bootstrap/bootstrap.json
-        
-        # i can get the directories and remove them before i do anything 
-
-
-
-
-
-        # for location in ${existing_locations[@]}; do
-        #     echo "$location"
-            
-        #     if [ $? -ne 0 ]; then
-        #         log_error_exit "Error"
-        #     fi
-        # done
-        
-        # echo ""
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-main(){
-    if [ $EUID != 0 ]; then
-        sudo "$0" "$@"
-        exit $?
-    fi
-#GLOBALS
-    readonly json_config="/home/$(logname)/.dotfiles/scripts/bootstrap/bootstrap.json"
-
-    
-
-    
-
-
-    #update_apt_cache
-    #upgrade_apt_packages
-    #install_apt_packages
-    
-    stow
-
-    #  location="/home/$(logname)"
-    #  echo "$location"
-    #  if [[ "$location" != "/home/$(logname)" ]]; then
-    #      echo "omg"
-    #  else 
-    #     echo "sara"
-    #  fi
-
-    # location="/home/$(logname)"
-
-    # if [[ "$(echo eval $location)" != "$(echo eval /home/$(logname))" ]]; then
-    #     eval echo $location
-    # else
-    #     echo "test"
-    # fi
-
-
-
-}
-
-main
-
-
-
-
-
-
-
 # #config file has my username hardcoded in file, need this function to make script more dynamic
 update_genmon_script_location(){
   user=$(logname)
@@ -225,156 +93,59 @@ update_genmon_script_location(){
   sed -i '0,/i/s//'$user'/' ~/.dotfiles/configs/xfce4/panel/genmon-1.rc
 }
 
+install_vscode(){
+  ~/.dotfiles/scripts/install-software/install-vscode
+}
 
+install_vscode_extensions(){
+  ~/.dotfiles/scripts/install-software/install-vscode-extensions
+}
 
+install_vimix_theme(){
+  ~/.dotfiles/scripts/install-themes/install-vimix-theme
+}
 
+install_vimix_icon(){
+  ~/.dotfiles/scripts/install-icons/install-vimix-icon
+}
 
+restore_interfaces_file(){
+  echo begin restoration of interfaces file
+  head -8 /etc/network/interfaces > ~/interfaces
+  sudo rm /etc/network/interfaces
+  sudo mv ~/interfaces /etc/network/interfaces
+}
 
+restart_system(){
+  echo system bootstrapping complete, restarting now . . .
+  sleep 1
+  sudo reboot
+}
 
+main(){
+    if [ $EUID != 0 ]; then
+        sudo "$0" "$@"
+        exit $?
+    fi
 
+    #GLOBALS
+    readonly json_config="/home/$(logname)/.dotfiles/scripts/bootstrap/bootstrap.json"
 
+    #update_apt_cache
+    #upgrade_apt_packages
+    #install_apt_packages
+    
+    stow
+    #update_genmon_script_location
+    #install_vscode
+    #install_vscode_extensions
+    #install_vimix_theme
+    #install_vimix_icon
+    #restore_interfaces_file
+    #restart_system
+}
 
-
-
-
-
+main
 
 # #https://askubuntu.com/questions/425754/how-do-i-run-a-sudo-command-inside-a-script
 # #https://www.baeldung.com/linux/store-command-in-variable
-# function stow_packages_v2(){
-#     #local readonly config="/home/i/.dotfiles/scripts/bootstrap/bootstrap.json"
-
-#     local readonly stow_packages="$(jq -r .\"stow-targets\"[].name /home/i/.dotfiles/scripts/bootstrap/bootstrap.json)"
-
-#     for package in ${stow_packages[@]}; do
-#         local target="$(jq -r ".\"stow-targets\"[] | select(.name==\"$package\") .folder | .[]" /home/i/.dotfiles/scripts/bootstrap/bootstrap.json)"
-        
-#         echo stow -v -d /home/i/.dotfiles/configs -t /home/i/"$target" "$package" 
-#         # for target in ${targets[@]}; do
-#         #     #echo $target
-#         #     #echo stow -v -d /home/i/.dotfiles/configs -t /home/i/
-#         #     #echo stow -v -d /home/i/.dotfiles/configs -t /home/i/ "$package"
-#         # done
-#     done
-# }
-
-
-
-
-
-
-# source $HOME/.dotfiles/scripts/bootstrap/bootstrap-variables/apt-packages
-# source $HOME/.dotfiles/scripts/bootstrap/bootstrap-variables/stow-targets
-# source $HOME/.dotfiles/scripts/bootstrap/bootstrap-variables/stow-targets-to-delete
-
-# sudo echo > /dev/null 2>&1
-
-# update_apt_cache(){
-#   echo updating apt cache.
-
-#   sudo apt update -y
-#   if [ $? -ne 0 ];
-#   then
-#       clear
-#       echo failure updating apt cache.
-#       exit
-#   fi
-# }
-
-# upgrade_apt_packages(){
-#   echo upgrading apt packages.
-
-#   sudo apt upgrade -y
-#   if [ $? -ne 0 ];
-#   then
-#       clear
-#       echo failure upgrading apt packages.
-#       exit
-#   fi
-# }
-
-# install_apt_packages(){
-#   for package in "${!apt_packages[@]}";
-#   do
-
-#     sudo apt install -y ${apt_packages[$package]}
-#     if [ $? -ne 0 ];
-#     then
-#         clear
-#         echo failure installing ${apt_packages[$package]}.
-#         exit
-#     fi
-#   done
-# }
-
-# stow_targets_to_delete(){
-#   for target in "${stow_targets_to_delete[@]}";
-#   do
-#     sudo rm -rf $target
-#   done
-# }
-
-# create_config_directories(){
-#   if [ ! -d "$HOME/.config" ]
-#   then
-#       mkdir $HOME/.config
-#       mkdir $HOME/.config/xfce4
-#       mkdir $HOME/.config/redshift
-#       mkdir $HOME/.config/autostart
-#       mkdir -p $HOME/.config/Code/User
-#       mkdir $HOME/source
-#   fi
-# }
-
-# apply_stow_configurations(){
-#   for target in "${!stow_targets[@]}";
-#   do
-#     stow -v -d $HOME/.dotfiles/configs -t $HOME/${stow_targets[$target]} $target
-#   done
-# }
-
-
-
-# install_vscode(){
-#   ~/.dotfiles/scripts/install-software/install-vscode
-# }
-
-# install_vscode_extensions(){
-#   ~/.dotfiles/scripts/install-software/install-vscode-extensions
-# }
-
-# install_vimix_theme(){
-#   ~/.dotfiles/scripts/install-themes/install-vimix-theme
-# }
-
-# install_vimix_icon(){
-#   ~/.dotfiles/scripts/install-icons/install-vimix-icon
-# }
-
-# restore_interfaces_file(){
-#   echo begin restoration of interfaces file
-
-#   head -8 /etc/network/interfaces > ~/interfaces
-#   sudo rm /etc/network/interfaces
-#   sudo mv ~/interfaces /etc/network/interfaces
-# }
-
-# restart_system(){
-#   echo system bootstrapping complete, restarting now . . .
-#   sleep 1
-#   sudo reboot
-# }
-
-# update_apt_cache
-# upgrade_apt_packages
-# install_apt_packages
-# stow_targets_to_delete
-# create_config_directories
-# apply_stow_configurations
-# update_genmon_script_location
-# install_vscode
-# install_vscode_extensions
-# install_vimix_theme
-# install_vimix_icon
-# restore_interfaces_file
-# restart_system
