@@ -23,32 +23,6 @@
         "telegram-desktop",
         "blueman"
     ],
-    "stow-targets": [
-        {
-            "name": "git",
-            "folder": [
-                "~"
-            ]
-        },
-        {
-            "name": "bash",
-            "folder": [
-                "~"
-            ]
-        },
-        {
-            "name": "code",
-            "folder": [
-                ".config/Code/User"
-            ]
-        },
-        {
-            "name": "xfce4",
-            "folder": [
-                ".config/xfce4/"
-            ]
-        }
-    ],
     "stow": [
         {
             "package": "git",
@@ -69,16 +43,16 @@
             "package": "code",
             "directory": ".config/Code/User", 
             "files":[
-                ".config/Code/User/keybindings.json", 
-                ".config/Code/User/settings.json"
+                "/home/$(logname)/.config/Code/User/keybindings.json", 
+                "/home/$(logname)/.config/Code/User/settings.json"
             ]
         },
         {
             "package": "xfce4",
             "directory": ".config/xfce4/",
             "files":[
-                ".config/xfce4/xfconf",
-                ".config/xfce4/panel"
+                "/home/$(logname)/.config/xfce4/xfconf",
+                "/home/$(logname)/.config/xfce4/panel"
             ]
         }
     ], 
