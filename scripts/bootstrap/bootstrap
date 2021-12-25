@@ -49,7 +49,7 @@ install_apt_packages(){
         log_error_exit "Error installing jq!"
     fi
 
-    local readonly apt_packages="$(jq -r .\"apt-packages\"[] $json_config)"
+    local readonly apt_packages="$(jq -r .\"apt-packages\"[] $JSON_CONFIG)"
 
     for package in $apt_packages; do
         sudo apt install -y "${package}"
@@ -61,26 +61,26 @@ install_apt_packages(){
 }
 
 stow(){
-    local readonly packages="$(jq -r .\"stow\"[].package $json_config)"
+    local readonly packages="$(jq -r .\"stow\"[].package $JSON_CONFIG)"
 
     #syncing configuration one stow package at a time 
     for package in ${packages[@]}; do
 
-        local stow_locations="$(jq -r ".\"stow\"[] | select(.package==\"$package\") | .directory, .files[]" $json_config)"
+        local stow_locations="$(jq -r ".\"stow\"[] | select(.package==\"$package\") | .directory, .files[]" $JSON_CONFIG)"
 
         #Before configuration can be applied pre existing / default files and directories must be deleted
         for location in ${stow_locations[@]}; do
-            if [[ "$(eval echo $location)" != "$(eval echo /home/$(logname))" ]]; then
+            if [[ "$(eval echo $location)" != "$(eval echo /home/${CURRENT_USER})" ]]; then
                 eval sudo rm -rf "$location"
             fi
         done
         
-        local directories="$(jq -r ".\"stow\"[] | select(.package==\"$package\") .directory" $json_config)"
+        local directories="$(jq -r ".\"stow\"[] | select(.package==\"$package\") .directory" $JSON_CONFIG)"
 
-        #Finally apply configuration each for each package each directory at a time
+        # #Finally apply configuration each for each package each directory at a time
         for directory in ${directories[@]}; do
-            eval sudo -u $(logname) mkdir -p "$directory"
-            eval sudo stow -v -d /home/$(logname)/.dotfiles/configs -t "$directory" "$package"
+            eval sudo -u ${CURRENT_USER} mkdir -p "$directory"
+            eval sudo stow -v -d /home/${CURRENT_USER}/.dotfiles/configs -t "$directory" "$package"
         done
     done
 }
@@ -135,14 +135,14 @@ main(){
     fi
 
     #GLOBALS
-    readonly json_config="/home/$(logname)/.dotfiles/scripts/bootstrap/bootstrap.json"
+    readonly CURRENT_USER="$(logname)"
+    readonly JSON_CONFIG="/home/${CURRENT_USER}/.dotfiles/scripts/bootstrap/bootstrap.json"
 
-    update_apt_cache
-    upgrade_apt_packages
-    install_apt_packages
-    
+    #update_apt_cache
+    #upgrade_apt_packages
+    #install_apt_packages
     stow
-    update_genmon_script_location
+    #update_genmon_script_location
     #install_vscode
     #install_vscode_extensions
     #install_vimix_theme
@@ -152,6 +152,3 @@ main(){
 }
 
 main
-
-# #https://askubuntu.com/questions/425754/how-do-i-run-a-sudo-command-inside-a-script
-# #https://www.baeldung.com/linux/store-command-in-variable
