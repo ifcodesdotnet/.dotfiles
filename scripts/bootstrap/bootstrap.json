@@ -87,5 +87,11 @@
                 "/home/$(logname)/scripts.js"
             ]
         }
+    ], 
+    "additional-components": [
+        "/home/$(logname)/.dotfiles/scripts/install-software/install-vscode",
+        "/home/$(logname)/.dotfiles/scripts/install-software/install-vscode-extensions",
+        "/home/$(logname)/.dotfiles/scripts/install-themes/install-vimix-theme",
+        "/home/$(logname)/.dotfiles/scripts/install-icons/install-vimix-icon"
     ]
 }

@@ -17,6 +17,9 @@
 #
 #   https://stackoverflow.com/questions/3522341/identify-user-in-a-bash-script-called-by-sudo
 #     Figuring out who ran script when used by sudo
+#
+#   https://askubuntu.com/questions/425754/how-do-i-run-a-sudo-command-inside-a-script
+
 
 log_error_exit(){
     echo $1 && exit
@@ -46,7 +49,7 @@ install_apt_packages(){
     sudo apt install -y jq
 
     if [ $? -ne 0 ]; then
-        log_error_exit "Error installing jq!"
+        log_error_exit "error installing jq!"
     fi
 
     local readonly apt_packages="$(jq -r .\"apt-packages\"[] $JSON_CONFIG)"
@@ -55,7 +58,7 @@ install_apt_packages(){
         sudo apt install -y "${package}"
 
         if [ $? -ne 0 ]; then
-            log_error_exit "Error installing ${package}"
+            log_error_exit "error installing ${package}"
         fi
     done
 }
@@ -85,13 +88,14 @@ stow(){
     done
 }
 
-##https://askubuntu.com/questions/425754/how-do-i-run-a-sudo-command-inside-a-script
 
 
 
 
 
 # #config file has my username hardcoded in file, need this function to make script more dynamic
+#do i update all my files via sed ???
+#or do i use eval to run logname dynamically ?
 update_genmon_script_location(){
   user=$(logname)
   #https://stackoverflow.com/questions/30871868/sed-replace-first-occurence-in-place-with-big-files
@@ -99,20 +103,16 @@ update_genmon_script_location(){
   sed -i '0,/i/s//'$user'/' /home/$(logname)/.dotfiles/configs/xfce4/panel/genmon-1.rc
 }
 
-install_vscode(){
-  ~/.dotfiles/scripts/install-software/install-vscode
-}
+install_additional_components(){
+    local readonly additional_component_scripts="$(jq -r .\"additional-components\"[] $JSON_CONFIG)"
 
-install_vscode_extensions(){
-  ~/.dotfiles/scripts/install-software/install-vscode-extensions
-}
+    for script in $additional_component_scripts; do
+        eval ${script}
 
-install_vimix_theme(){
-  ~/.dotfiles/scripts/install-themes/install-vimix-theme
-}
-
-install_vimix_icon(){
-  ~/.dotfiles/scripts/install-icons/install-vimix-icon
+        if [ $? -ne 0 ]; then
+           log_error_exit "error installing ${script}"
+        fi
+    done
 }
 
 restore_interfaces_file(){
@@ -141,7 +141,7 @@ main(){
     #update_apt_cache
     #upgrade_apt_packages
     #install_apt_packages
-    stow
+    #stow
     #update_genmon_script_location
     #install_vscode
     #install_vscode_extensions
@@ -149,6 +149,8 @@ main(){
     #install_vimix_icon
     #restore_interfaces_file
     #restart_system
+
+    install_additional_components
 }
 
 main
