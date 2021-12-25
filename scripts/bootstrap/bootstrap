@@ -132,12 +132,12 @@ main(){
     #GLOBALS
     readonly json_config="/home/$(logname)/.dotfiles/scripts/bootstrap/bootstrap.json"
 
-    #update_apt_cache
-    #upgrade_apt_packages
-    #install_apt_packages
+    update_apt_cache
+    upgrade_apt_packages
+    install_apt_packages
     
     stow
-    #update_genmon_script_location
+    update_genmon_script_location
     #install_vscode
     #install_vscode_extensions
     #install_vimix_theme
