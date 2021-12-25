@@ -79,12 +79,17 @@ stow(){
 
         #Finally apply configuration each for each package each directory at a time
         for directory in ${directories[@]}; do
-            eval sudo mkdir -p "$directory"
-            eval chown $(logname):$(logname) "$directory"
+            eval sudo -u $(logname) mkdir -p "$directory"
             eval sudo stow -v -d /home/$(logname)/.dotfiles/configs -t "$directory" "$package"
         done
     done
 }
+
+##https://askubuntu.com/questions/425754/how-do-i-run-a-sudo-command-inside-a-script
+
+
+
+
 
 # #config file has my username hardcoded in file, need this function to make script more dynamic
 update_genmon_script_location(){
