@@ -41,7 +41,7 @@
         },
         {
             "package": "code",
-            "directory": ".config/Code/User", 
+            "directory": "/home/$(logname)/.config/Code/User", 
             "files":[
                 "/home/$(logname)/.config/Code/User/keybindings.json", 
                 "/home/$(logname)/.config/Code/User/settings.json"
@@ -49,7 +49,7 @@
         },
         {
             "package": "xfce4",
-            "directory": ".config/xfce4/",
+            "directory": "/home/$(logname)/.config/xfce4/",
             "files":[
                 "/home/$(logname)/.config/xfce4/xfconf",
                 "/home/$(logname)/.config/xfce4/panel"
