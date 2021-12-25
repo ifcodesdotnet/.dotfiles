@@ -61,12 +61,12 @@ install_apt_packages(){
 }
 
 stow(){
-    local readonly packages="$(jq -r .\"test\"[].package $json_config)"
+    local readonly packages="$(jq -r .\"stow\"[].package $json_config)"
 
     #syncing configuration one stow package at a time 
     for package in ${packages[@]}; do
 
-        local stow_locations="$(jq -r ".\"test\"[] | select(.package==\"$package\") | .directory, .files[]" $json_config)"
+        local stow_locations="$(jq -r ".\"stow\"[] | select(.package==\"$package\") | .directory, .files[]" $json_config)"
 
         #Before configuration can be applied pre existing / default files and directories must be deleted
         for location in ${stow_locations[@]}; do
@@ -75,11 +75,12 @@ stow(){
             fi
         done
         
-        local directories="$(jq -r ".\"test\"[] | select(.package==\"$package\") .directory" $json_config)"
+        local directories="$(jq -r ".\"stow\"[] | select(.package==\"$package\") .directory" $json_config)"
 
         #Finally apply configuration each for each package each directory at a time
         for directory in ${directories[@]}; do
             eval sudo mkdir -p "$directory"
+            eval chown $(logname):$(logname) "$directory"
             eval sudo stow -v -d /home/$(logname)/.dotfiles/configs -t "$directory" "$package"
         done
     done
@@ -90,7 +91,7 @@ update_genmon_script_location(){
   user=$(logname)
   #https://stackoverflow.com/questions/30871868/sed-replace-first-occurence-in-place-with-big-files
   #https://linuxconfig.org/how-to-substitute-only-a-first-match-occurrence-using-sed-command
-  sed -i '0,/i/s//'$user'/' /home/($logname)/.dotfiles/configs/xfce4/panel/genmon-1.rc
+  sed -i '0,/i/s//'$user'/' /home/$(logname)/.dotfiles/configs/xfce4/panel/genmon-1.rc
 }
 
 install_vscode(){
