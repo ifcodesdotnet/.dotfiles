@@ -2,7 +2,7 @@
 #
 # Script name: bootstrap
 # Description: Install xfce4 with my preferred applications and configurations.
-# Dependencies: jq, sed, stow
+# Dependencies: sudo, jq, sed, stow
 # GitHub: https://github.com/ifcodesdotnet/.dotfiles
 # Contributors: Ismael Fernandez
 # Sources:
@@ -87,11 +87,6 @@ stow(){
         done
     done
 }
-
-
-
-
-
 
 # #config file has my username hardcoded in file, need this function to make script more dynamic
 #do i update all my files via sed ???

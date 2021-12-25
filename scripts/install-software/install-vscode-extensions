@@ -7,8 +7,6 @@
 # GitHub: https://github.com/ifcodesdotnet/.dotfiles
 # Contributors: Ismael Fernandez
 
-sudo echo > /dev/null 2>&1
-
 vscode_extensions=()
 vscode_extensions+=("PKief.material-icon-theme")
 vscode_extensions+=("jolaleye.horizon-theme-vscode")
@@ -19,5 +17,5 @@ vscode_extensions+=("alefragnani.Bookmarks")
 
 for extension in "${!vscode_extensions[@]}";
 do
-    code --install-extension ${vscode_extensions[$extension]}
+    sudo -u $(logname) code --install-extension ${vscode_extensions[$extension]}
 done
