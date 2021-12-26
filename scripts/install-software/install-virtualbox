@@ -1,0 +1,29 @@
+#!/bin/bash
+#
+# Script name: install-virtualbox
+# Description: Install Oracle Virtual Box on Debian 10, instructions taken
+#              from https://www.virtualbox.org/wiki/Linux_Downloads.
+# Dependencies: 
+# GitHub: https://github.com/ifcodesdotnet/.dotfiles-min
+# Contributors: Ismael Fernandez
+
+sudo echo > /dev/null 2>&1
+
+ if [ ! -f "/etc/apt/sources.list.d/virtualbox.list" ]; 
+then
+    echo adding virtualbox debian repository link.
+    sudo sh -c 'echo "deb [arch=amd64] https://download.virtualbox.org/virtualbox/debian buster contrib" > /etc/apt/sources.list.d/virtualbox.list'
+fi
+
+wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add -
+
+sudo apt-get update
+
+sudo apt-get install -y virtualbox-6.1
+
+VirtualboxVersionInstalled=$(apt-cache policy virtualbox | grep -oP '(?<=Installed: )[^ ]*')
+
+if [ "$VirtualboxVersionInstalled" == "(none)" ];
+then
+   echo successfully installed virtualbox.
+fi
