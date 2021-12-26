@@ -19,8 +19,6 @@
         "evince",
         "ristretto",
         "rclone",
-        "thunderbird",
-        "telegram-desktop",
         "blueman"
     ],
     "stow": [
@@ -66,25 +64,8 @@
             "package": "autostart",
             "directory": "/home/$(logname)/.config/autostart/",
             "files":[
-                "/home/$(logname)/.config/autostart/redshift-gtk.desktop"
-            ]
-        }
-    ], 
-    "test": [
-        {
-            "package": "sara",
-            "directory": "/home/$(logname)/.config/sara",
-            "files":[
-                "/home/$(logname)/.config/sara/index.html",
-                "/home/$(logname)/.config/sara/scripts.js"
-            ]
-        }, 
-        {
-            "package": "sara",
-            "directory": "/home/$(logname)",
-            "files":[
-                "/home/$(logname)/index.html",
-                "/home/$(logname)/scripts.js"
+                "/home/$(logname)/.config/autostart/redshift-gtk.desktop",
+                "/home/$(logname)/.config/autostart/beep.desktops"
             ]
         }
     ], 
