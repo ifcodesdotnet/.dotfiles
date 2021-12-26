@@ -138,14 +138,10 @@ main(){
     #install_apt_packages
     #stow
     #update_genmon_script_location
-    #install_vscode
-    #install_vscode_extensions
-    #install_vimix_theme
-    #install_vimix_icon
     #restore_interfaces_file
     #restart_system
 
-    install_additional_components
+    #install_additional_components
 }
 
 main
