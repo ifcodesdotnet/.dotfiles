@@ -105,7 +105,7 @@ install_additional_components(){
         eval ${script}
 
         if [ $? -ne 0 ]; then
-           log_error_exit "error installing ${script}"
+            log_error_exit "error executing script $(basename ${script})"
         fi
     done
 }
@@ -133,15 +133,14 @@ main(){
     readonly CURRENT_USER="$(logname)"
     readonly JSON_CONFIG="/home/${CURRENT_USER}/.dotfiles/scripts/bootstrap/bootstrap.json"
 
-    #update_apt_cache
-    #upgrade_apt_packages
-    #install_apt_packages
-    #stow
-    #update_genmon_script_location
-    #restore_interfaces_file
-    #restart_system
-
-    #install_additional_components
+    update_apt_cache
+    upgrade_apt_packages
+    install_apt_packages
+    stow
+    install_additional_components
+    update_genmon_script_location
+    restore_interfaces_file
+    restart_system
 }
 
 main
