@@ -6,13 +6,15 @@
 # Dependencies: 
 # GitHub: https://github.com/ifcodesdotnet/.dotfiles-min
 # Contributors: Ismael Fernandez
+# Sources: 
+#  https://linuxconfig.org/check-what-debian-version-you-are-running-on-your-linux-system
 
 sudo echo > /dev/null 2>&1
 
  if [ ! -f "/etc/apt/sources.list.d/virtualbox.list" ]; 
 then
     echo adding virtualbox debian repository link.
-    sudo sh -c 'echo "deb [arch=amd64] https://download.virtualbox.org/virtualbox/debian buster contrib" > /etc/apt/sources.list.d/virtualbox.list'
+    sudo sh -c 'echo "deb [arch=amd64] https://download.virtualbox.org/virtualbox/debian bullseye contrib" > /etc/apt/sources.list.d/virtualbox.list'
 fi
 
 wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add -
