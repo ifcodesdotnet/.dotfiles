@@ -2,98 +2,116 @@
 #
 # Script name: bootstrap
 # Description: Install xfce4 with my preferred applications and configurations.
-# Dependencies: gpg, apt-transport-https
+# Dependencies: sudo, jq, sed, stow
 # GitHub: https://github.com/ifcodesdotnet/.dotfiles
 # Contributors: Ismael Fernandez
+# Sources:
+#   https://google.github.io/styleguide/shellguide.html
+#     Shell scripting coding guidelines
+#
+#   https://stackoverflow.com/questions/64786/error-handling-in-bash
+#     Error handling in bash
+#   
+#   https://unix.stackexchange.com/questions/28791/prompt-for-sudo-password-and-programmatically-elevate-privilege-in-bash-script
+#     Prompt user for sudo access in script
+#
+#   https://stackoverflow.com/questions/3522341/identify-user-in-a-bash-script-called-by-sudo
+#     Figuring out who ran script when used by sudo
+#
+#   https://askubuntu.com/questions/425754/how-do-i-run-a-sudo-command-inside-a-script
 
-source $HOME/.dotfiles/scripts/bootstrap/bootstrap-variables/apt-packages
-source $HOME/.dotfiles/scripts/bootstrap/bootstrap-variables/stow-targets
-source $HOME/.dotfiles/scripts/bootstrap/bootstrap-variables/stow-targets-to-delete
 
-sudo echo > /dev/null 2>&1
+log_error_exit(){
+    echo $1 && exit
+}
 
 update_apt_cache(){
-  echo updating apt cache.
+    echo updating apt cache.
 
-  sudo apt update -y
-  if [ $? -ne 0 ];
-  then
-      clear
-      echo failure updating apt cache.
-      exit
-  fi
+    sudo apt update -y
+
+    if [ $? -ne 0 ]; then
+        log_error_exit "failure updating apt cache."
+    fi
 }
 
 upgrade_apt_packages(){
-  echo upgrading apt packages.
+    echo upgrading apt packages.
+    
+    sudo apt upgrade -y
 
-  sudo apt upgrade -y
-  if [ $? -ne 0 ];
-  then
-      clear
-      echo failure upgrading apt packages.
-      exit
-  fi
+    if [ $? -ne 0 ]; then
+        log_error_exit "failure upgrading apt packages."
+    fi
 }
 
 install_apt_packages(){
-  for package in "${!apt_packages[@]}";
-  do
+    sudo apt install -y jq
 
-    sudo apt install -y ${apt_packages[$package]}
-    if [ $? -ne 0 ];
-    then
-        clear
-        echo failure installing ${apt_packages[$package]}.
-        exit
+    if [ $? -ne 0 ]; then
+        log_error_exit "error installing jq!"
     fi
-  done
+
+    local readonly apt_packages="$(jq -r .\"apt-packages\"[] $JSON_CONFIG)"
+
+    for package in $apt_packages; do
+        sudo apt install -y "${package}"
+
+        if [ $? -ne 0 ]; then
+            log_error_exit "error installing ${package}"
+        fi
+    done
 }
 
-stow_targets_to_delete(){
-  for target in "${stow_targets_to_delete[@]}";
-  do
-    sudo rm -rf $target
-  done
+stow(){
+    local readonly packages="$(jq -r .\"stow\"[].package $JSON_CONFIG)"
+
+    #syncing configuration one stow package at a time 
+    for package in ${packages[@]}; do
+
+        local stow_locations="$(jq -r ".\"stow\"[] | select(.package==\"$package\") | .directory, .files[]" $JSON_CONFIG)"
+
+        #Before configuration can be applied pre existing / default files and directories must be deleted
+        for location in ${stow_locations[@]}; do
+            if [[ "$(eval echo $location)" != "$(eval echo /home/${CURRENT_USER})" ]]; then
+                eval sudo rm -rf "$location"
+            fi
+        done
+        
+        local directories="$(jq -r ".\"stow\"[] | select(.package==\"$package\") .directory" $JSON_CONFIG)"
+
+        # #Finally apply configuration each for each package each directory at a time
+        for directory in ${directories[@]}; do
+            eval sudo -u ${CURRENT_USER} mkdir -p "$directory"
+            eval sudo stow -v -d /home/${CURRENT_USER}/.dotfiles/configs -t "$directory" "$package"
+        done
+    done
 }
 
-create_config_directories(){
-  if [ ! -d "$HOME/.config" ]
-  then
-      mkdir $HOME/.config
-      mkdir $HOME/.config/xfce4
-      mkdir $HOME/.config/redshift
-      mkdir $HOME/.config/autostart
-      mkdir -p $HOME/.config/Code/User
-  fi
+# #config file has my username hardcoded in file, need this function to make script more dynamic
+#do i update all my files via sed ???
+#or do i use eval to run logname dynamically ?
+update_genmon_script_location(){
+  user=$(logname)
+  #https://stackoverflow.com/questions/30871868/sed-replace-first-occurence-in-place-with-big-files
+  #https://linuxconfig.org/how-to-substitute-only-a-first-match-occurrence-using-sed-command
+  sed -i '0,/i/s//'$user'/' /home/$(logname)/.dotfiles/configs/xfce4/panel/genmon-1.rc
 }
 
-apply_stow_configurations(){
-  for target in "${!stow_targets[@]}";
-  do
-    stow -v -d $HOME/.dotfiles/configs -t $HOME/${stow_targets[$target]} $target
-  done
-}
+install_additional_components(){
+    local readonly additional_component_scripts="$(jq -r .\"additional-components\"[] $JSON_CONFIG)"
 
-install_vscode(){
-  ~/.dotfiles/scripts/install-software/install-vscode
-}
+    for script in $additional_component_scripts; do
+        eval ${script}
 
-install_vscode_extensions(){
- ~/.dotfiles/scripts/install-software/install-vscode-extensions
-}
-
-install_vimix_theme(){
-  ~/.dotfiles/scripts/install-themes/install-vimix-theme
-}
-
-install_vimix_icon(){
-  ~/.dotfiles/scripts/install-icons/install-vimix-icon
+        if [ $? -ne 0 ]; then
+            log_error_exit "error executing script $(basename ${script})"
+        fi
+    done
 }
 
 restore_interfaces_file(){
   echo begin restoration of interfaces file
-
   head -8 /etc/network/interfaces > ~/interfaces
   sudo rm /etc/network/interfaces
   sudo mv ~/interfaces /etc/network/interfaces
@@ -105,15 +123,24 @@ restart_system(){
   sudo reboot
 }
 
-update_apt_cache
-upgrade_apt_packages
-install_apt_packages
-stow_targets_to_delete
-create_config_directories
-apply_stow_configurations
-install_vscode
-install_vscode_extensions
-install_vimix_theme
-install_vimix_icon
-restore_interfaces_file
-restart_system
+main(){
+    if [ $EUID != 0 ]; then
+        sudo "$0" "$@"
+        exit $?
+    fi
+
+    #GLOBALS
+    readonly CURRENT_USER="$(logname)"
+    readonly JSON_CONFIG="/home/${CURRENT_USER}/.dotfiles/scripts/bootstrap/bootstrap.json"
+
+    update_apt_cache
+    upgrade_apt_packages
+    install_apt_packages
+    stow
+    install_additional_components
+    update_genmon_script_location
+    restore_interfaces_file
+    restart_system
+}
+
+main

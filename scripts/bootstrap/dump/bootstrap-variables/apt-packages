@@ -1,0 +1,30 @@
+#!/bin/bash
+
+apt_packages=()
+
+#packages need to run bootstrap script
+apt_packages+=("sudo")
+apt_packages+=("git")
+apt_packages+=("stow")
+apt_packages+=("apt-transport-https")
+
+#packages needed for basic functionality
+apt_packages+=("xfce4")
+apt_packages+=("xfce4-power-manager")
+apt_packages+=("xfce4-terminal")
+apt_packages+=("xfce4-genmon-plugin")
+apt_packages+=("xfce4-taskmanager")
+apt_packages+=("thunar-archive-plugin")
+apt_packages+=("network-manager-gnome")
+apt_packages+=("gvfs-backends")
+apt_packages+=("libsass1")
+apt_packages+=("redshift-gtk")
+
+#apt_packages+=("synaptic")
+#apt_packages+=("firefox-esr")
+#apt_packages+=("evince")
+#apt_packages+=("ristretto")
+apt_packages+=("rclone")
+#apt_packages+=("thunderbird")
+#apt_packages+=("telegram-desktop")
+#apt_packages+=("blueman")

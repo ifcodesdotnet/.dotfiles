@@ -1,0 +1,78 @@
+{
+    "apt-packages": [
+        "sudo",
+        "git",
+        "stow",
+        "apt-transport-https",
+        "xfce4",
+        "xfce4-power-manager",
+        "xfce4-terminal",
+        "xfce4-genmon-plugin",
+        "xfce4-taskmanager",
+        "thunar-archive-plugin",
+        "network-manager-gnome",
+        "gvfs-backends",
+        "libsass1",
+        "redshift-gtk",
+        "synaptic",
+        "firefox-esr",
+        "evince",
+        "ristretto",
+        "rclone",
+        "blueman"
+    ],
+    "stow": [
+        {
+            "package": "git",
+            "directory": "/home/$(logname)",
+            "files":[
+                "/home/$(logname)/.gitconfig"
+            ]
+        },
+        {
+            "package": "bash",
+            "directory": "/home/$(logname)", 
+            "files":[
+                "/home/$(logname)/.bashrc",
+                "/home/$(logname)/.profile"
+            ]
+        },
+        {
+            "package": "code",
+            "directory": "/home/$(logname)/.config/Code/User", 
+            "files":[
+                "/home/$(logname)/.config/Code/User/keybindings.json", 
+                "/home/$(logname)/.config/Code/User/settings.json"
+            ]
+        },
+        {
+            "package": "xfce4",
+            "directory": "/home/$(logname)/.config/xfce4/",
+            "files":[
+                "/home/$(logname)/.config/xfce4/xfconf",
+                "/home/$(logname)/.config/xfce4/panel"
+            ]
+        },
+        {
+            "package": "redshift",
+            "directory": "/home/$(logname)/.config/redshift/",
+            "files":[
+                "/home/$(logname)/.config/redshift/redshift.conf"
+            ]
+        },
+        {
+            "package": "autostart",
+            "directory": "/home/$(logname)/.config/autostart/",
+            "files":[
+                "/home/$(logname)/.config/autostart/redshift-gtk.desktop",
+                "/home/$(logname)/.config/autostart/beep.desktops"
+            ]
+        }
+    ], 
+    "additional-components": [
+        "/home/$(logname)/.dotfiles/scripts/install-software/install-vscode",
+        "/home/$(logname)/.dotfiles/scripts/install-software/install-vscode-extensions",
+        "/home/$(logname)/.dotfiles/scripts/install-themes/install-vimix-theme",
+        "/home/$(logname)/.dotfiles/scripts/install-icons/install-vimix-icon"
+    ]
+}

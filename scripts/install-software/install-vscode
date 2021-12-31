@@ -9,6 +9,18 @@
 
 sudo echo > /dev/null 2>&1
 
+install_gpg(){
+    echo installing gpg.
+
+    sudo apt install -y gpg
+    if [ $? -ne 0 ];
+    then
+        clear
+        echo failure installing gpg.
+        exit
+    fi
+}
+
 download_microsoft_repository_key(){
     if [ ! -f /etc/apt/trusted.gpg.d/packages.microsoft.gpg ]; 
     then
@@ -59,7 +71,7 @@ update_apt_cache(){
 install_apt_transport_https(){
     echo installing apt-transport-https.
 
-    sudo apt-get install -y apt-transport-https
+    sudo apt install -y apt-transport-https
     if [ $? -ne 0 ];
     then
         clear
@@ -80,6 +92,7 @@ install_vscode(){
     fi
 }
 
+install_gpg
 download_microsoft_repository_key
 install_microsoft_repository_key
 delete_microsoft_repository_key
