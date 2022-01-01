@@ -30,13 +30,17 @@ usage(){
    exit 1
 }
 
+main(){
+  readonly CURRENT_USER="$(logname)"
+  readonly JSON_CONFIG="/home/${CURRENT_USER}/.dotfiles/scripts/cloud-control/directories.json"
+  
+  case $1 in
+    --push) push
+            ;;
+    --pull) pull
+            ;;
+         *) usage
+  esac
+}
 
-readonly CURRENT_USER="$(logname)"
-readonly JSON_CONFIG="/home/${CURRENT_USER}/.dotfiles/scripts/cloud-control/directories.json"
-case $1 in
-  --push) push
-          ;;
-  --pull) pull
-          ;;
-       *) usage
-esac
+main $1
