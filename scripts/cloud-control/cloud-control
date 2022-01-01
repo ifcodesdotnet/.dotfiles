@@ -1,0 +1,42 @@
+#!/bin/bash
+#
+# Script name: cloud-control
+# Description: Send or get updates from a cloud storage provider
+# Dependencies: rclone
+# GitHub: https://github.com/ifcodesdotnet/.dotfiles
+# Contributors: Ismael Fernandez
+# Sources:
+#   https://unix.stackexchange.com/questions/31414/how-can-i-pass-a-command-line-argument-into-a-shell-script
+#   https://stackoverflow.com/questions/22025793/using-getopts-to-pick-up-whole-word-flags
+#   https://stackoverflow.com/questions/16654607/using-getopts-inside-a-bash-function
+#   https://github.com/0xConnorRhodes/dotfiles
+
+pull(){
+    local readonly directories="$(jq -r ".[]" $JSON_CONFIG)"
+
+    for directory in $directories; do
+      echo ${directory}
+    done
+}
+
+push(){
+    echo called push
+}
+
+usage(){
+   echo "Usage: $0 --push --pull"
+   echo -e "\t--push Send updates to the cloud"
+   echo -e "\t--pull Get updates from the cloud"
+   exit 1
+}
+
+
+readonly CURRENT_USER="$(logname)"
+readonly JSON_CONFIG="/home/${CURRENT_USER}/.dotfiles/scripts/cloud-control/directories.json"
+case $1 in
+  --push) push
+          ;;
+  --pull) pull
+          ;;
+       *) usage
+esac
