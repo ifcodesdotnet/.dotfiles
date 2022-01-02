@@ -1,9 +1,0 @@
-#!/bin/bash
-
-declare -A stow_targets
-stow_targets[git]=""
-stow_targets[bash]=""
-stow_targets[code]=".config/Code/User"
-stow_targets[xfce4]=".config/xfce4/"
-stow_targets[redshift]=".config/redshift"
-stow_targets[autostart]=".config/autostart"
