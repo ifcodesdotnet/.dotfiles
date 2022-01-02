@@ -1,0 +1,22 @@
+#!/bin/bash
+#
+# Script name: install-googlechrome
+# Description: Install Oracle Virtual Box on Debian 10, instructions taken
+#              from https://www.virtualbox.org/wiki/Linux_Downloads.
+# Dependencies: 
+# GitHub: https://github.com/ifcodesdotnet/.dotfiles-min
+# Contributors: Ismael Fernandez
+
+
+#for later refactoring
+# https://www.google.com/linuxrepositories/
+# https://unix.stackexchange.com/questions/53330/google-chrome-repo-debian-stable
+
+
+mkdir $HOME/google-chrome-temp-install
+
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
+     -P $HOME/google-chrome-temp-install
+
+sudo dpkg -i $HOME/google-chrome-temp-install/google-chrome-stable_current_amd64.deb
+sudo rm -rf $HOME/google-chrome-temp-install
