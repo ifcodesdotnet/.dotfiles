@@ -7,20 +7,22 @@
 # Contributors: Ismael Fernandez
 # Sources:
 #   https://unix.stackexchange.com/questions/31414/how-can-i-pass-a-command-line-argument-into-a-shell-script
-#   https://stackoverflow.com/questions/22025793/using-getopts-to-pick-up-whole-word-flags
-#   https://stackoverflow.com/questions/16654607/using-getopts-inside-a-bash-function
 #   https://github.com/0xConnorRhodes/dotfiles
 
 pull(){
     local readonly directories="$(jq -r ".[]" $JSON_CONFIG)"
 
     for directory in $directories; do
-      echo ${directory}
+      rclone sync od:${directory} ~/cloud/${directory} -P --stats 1ms --create-empty-src-dirs --exclude *.mp4
     done
 }
 
 push(){
-    echo called push
+    local readonly directories="$(jq -r ".[]" $JSON_CONFIG)"
+
+    for directory in $directories; do
+      rclone sync ~/cloud/${directory} od:${directory} -P --stats 1ms --create-empty-src-dirs
+    done
 }
 
 usage(){
@@ -33,7 +35,7 @@ usage(){
 main(){
   readonly CURRENT_USER="$(logname)"
   readonly JSON_CONFIG="/home/${CURRENT_USER}/.dotfiles/scripts/cloud-control/directories.json"
-  
+
   case $1 in
     --push) push
             ;;
