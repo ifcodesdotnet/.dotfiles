@@ -13,7 +13,7 @@ pull(){
     local readonly directories="$(jq -r ".[]" $JSON_CONFIG)"
 
     for directory in $directories; do
-      rclone sync od:${directory} ~/cloud/${directory} -P --stats 1ms --create-empty-src-dirs --exclude *.mp4
+      rclone sync od:${directory} ~/cloud/${directory} -P --stats 1ms --create-empty-src-dirs
     done
 }
 
