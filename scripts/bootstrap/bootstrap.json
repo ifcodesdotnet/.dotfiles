@@ -20,7 +20,10 @@
         "evince",
         "ristretto",
         "rclone",
-        "blueman"
+        "blueman", 
+        "grub-customizer",
+        "lightdm-gtk-greeter-settings", 
+        "vim"
     ],
     "stow": [
         {
