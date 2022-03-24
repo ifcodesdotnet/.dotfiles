@@ -8,12 +8,20 @@
 # Sources:
 #   https://unix.stackexchange.com/questions/31414/how-can-i-pass-a-command-line-argument-into-a-shell-script
 #   https://github.com/0xConnorRhodes/dotfiles
+#   https://rclone.org/flags/
 
 pull(){
     local readonly directories="$(jq -r ".[]" $JSON_CONFIG)"
+    local readonly timestamp=$(date +"%A-%B-%d-%l:%M-%p" | tr '[:upper:]' '[:lower:]')
 
     for directory in $directories; do
-      rclone sync od:${directory} ~/cloud/${directory} -P --stats 1ms --create-empty-src-dirs
+
+      rclone sync od:${directory} /home/${CURRENT_USER}/cloud/${directory} \
+             --backup-dir=/home/${CURRENT_USER}/cloud/backups/${timestamp} \
+             --progress \
+             --stats 1s \
+             --create-empty-src-dirs
+
     done
 }
 
@@ -21,7 +29,12 @@ push(){
     local readonly directories="$(jq -r ".[]" $JSON_CONFIG)"
 
     for directory in $directories; do
-      rclone sync ~/cloud/${directory} od:${directory} -P --stats 1ms --create-empty-src-dirs
+
+      rclone sync /home/${CURRENT_USER}/cloud/${directory} od:${directory} \
+             --progress \
+             --stats 1s \
+             --create-empty-src-dirs
+
     done
 }
 
