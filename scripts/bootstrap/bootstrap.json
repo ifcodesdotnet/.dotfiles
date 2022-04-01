@@ -23,7 +23,8 @@
         "blueman", 
         "grub-customizer",
         "lightdm-gtk-greeter-settings", 
-        "vim"
+        "vim",
+        "wmctrl"
     ],
     "stow": [
         {
