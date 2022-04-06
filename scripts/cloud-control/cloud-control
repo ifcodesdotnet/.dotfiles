@@ -9,10 +9,11 @@
 #   https://unix.stackexchange.com/questions/31414/how-can-i-pass-a-command-line-argument-into-a-shell-script
 #   https://github.com/0xConnorRhodes/dotfiles
 #   https://rclone.org/flags/
+#   https://stackoverflow.com/questions/13659318/how-to-remove-space-from-string
 
 pull(){
     local readonly directories="$(jq -r ".[]" $JSON_CONFIG)"
-    local readonly timestamp=$(date +"%A-%B-%d-%l:%M-%p" | tr '[:upper:]' '[:lower:]')
+    local readonly timestamp=$(date +"%A-%B-%d-%l:%M-%p" | tr '[:upper:]' '[:lower:]' | sed 's/ //g')
 
     for directory in $directories; do
 
